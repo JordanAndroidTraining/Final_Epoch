@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="colorPrimary">#673AB7</item>
+        <item name="colorPrimaryDark">#512DA8</item>
+        <item name="colorAccent">#FF4081</item>
+    </style>
+
+    <style name="SpotListItemText">
+        <item name="android:background">#97000000</item>
+        <item name="android:paddingRight">7dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="SpotShowCaption">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:paddingRight">7dp</item>
+        <item name="android:layout_marginTop">7dp</item>
+        <item name="android:layout_marginLeft">7dp</item>
+        <item name="android:layout_marginRight">7dp</item>
+    </style>
+
+    <style name="SpotShowContent">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+        <item name="android:padding">7dp</item>
+        <item name="android:layout_margin">7dp</item>
+        <item name="android:background">#97000000</item>
+    </style>
+</resources>
