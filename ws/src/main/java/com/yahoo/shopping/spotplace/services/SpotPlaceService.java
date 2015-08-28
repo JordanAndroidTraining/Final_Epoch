@@ -80,6 +80,11 @@ public class SpotPlaceService {
                         address = element.get(fiedlsMapping.get(SpotPlace.Fields.Address)).asText();
                     }
 
+                    String phoneNumber = "";
+                    if (fiedlsMapping.containsKey(SpotPlace.Fields.PhoneNumber)) {
+                        phoneNumber = element.get(fiedlsMapping.get(SpotPlace.Fields.PhoneNumber)).asText();
+                    }
+
                     String feature = "";
                     if (fiedlsMapping.containsKey(SpotPlace.Fields.Feature)) {
                         feature = element.get(fiedlsMapping.get(SpotPlace.Fields.Feature)).asText();
@@ -95,7 +100,7 @@ public class SpotPlaceService {
                         trafficInfo = element.get(fiedlsMapping.get(SpotPlace.Fields.TrafficInfo)).asText();
                     }
 
-                    SpotPlace model = new SpotPlace(type, title, address, feature, trafficInfo, reminder);
+                    SpotPlace model = new SpotPlace(type, title, address, phoneNumber, feature, trafficInfo, reminder);
                     repository.save(model);
                 }
             }

@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class SpotPlace {
     public enum Fields {
-        Title, Address, Feature, TrafficInfo, Reminder
+        Title, Address, PhoneNumber, Feature, TrafficInfo, Reminder
     }
 
     @Id
@@ -20,6 +20,7 @@ public class SpotPlace {
     private SpotPlaceType type;
     private String title;
     private String address;
+    private String phoneNumber;
 
     @Column(length = 2048)
     private String feature;
@@ -36,10 +37,11 @@ public class SpotPlace {
     public SpotPlace() {
     }
 
-    public SpotPlace(SpotPlaceType type, String title, String address, String feature, String trafficInfo, String reminder) {
+    public SpotPlace(SpotPlaceType type, String title, String address, String phoneNumber, String feature, String trafficInfo, String reminder) {
         this.type = type;
         this.title = title;
         this.address = address;
+        this.phoneNumber = phoneNumber;
         this.feature = feature;
         this.trafficInfo = trafficInfo;
         this.reminder = reminder;
@@ -75,6 +77,14 @@ public class SpotPlace {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getFeature() {
