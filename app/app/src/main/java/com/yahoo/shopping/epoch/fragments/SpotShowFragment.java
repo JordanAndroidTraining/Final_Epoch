@@ -18,11 +18,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.models.SpotPlace;
+
+import java.net.URLEncoder;
 
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
@@ -96,6 +99,8 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
 
         mVH.ivMakeCall.setTag(mPlace.getPhoneNumber());
         mVH.ivMakeCall.setOnClickListener(this);
+
+        mVH.ivViewMap.setTag(mPlace.getAddress());
         mVH.ivViewMap.setOnClickListener(this);
     }
 
@@ -104,20 +109,39 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         switch (v.getId()) {
             case R.id.fragment_spot_show_iv_makecall:
                 // shake icon
-                Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.shake);
-                mVH.ivMakeCall.startAnimation(anim);
+                Animation animShake = AnimationUtils.loadAnimation(mContext, R.anim.shake);
+                mVH.ivMakeCall.startAnimation(animShake);
                 // make call
                 makePhoneCall((String) v.getTag());
                 break;
             case R.id.fragment_spot_show_iv_viewmap:
+                // magnify icon
+                Animation animMagnify = AnimationUtils.loadAnimation(mContext, R.anim.magnify);
+                mVH.ivViewMap.startAnimation(animMagnify);
+                launchGoogleMap((String) v.getTag());
                 break;
         }
     }
 
     private void makePhoneCall(String number) {
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:" + number));
-        mContext.startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + number));
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void launchGoogleMap(String address) {
+        try {
+            Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + URLEncoder.encode(address, "UTF-8"));
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
+        } catch (Exception e) {
+            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
