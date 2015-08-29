@@ -8,7 +8,37 @@
         android:id="@+id/fragment_spot_show_iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"
         android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:id="@+id/fragment_spot_show_rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#11000000">
+
+        <ImageView
+            android:id="@+id/fragment_spot_show_iv_viewmap"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/fragment_spot_show_iv_makecall"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/fragment_spot_show_iv_makecall"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_viewmap" />
+
+        <ImageView
+            android:id="@+id/fragment_spot_show_iv_makecall"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_makecall" />
+
+    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/fragment_spot_show_sv_container"

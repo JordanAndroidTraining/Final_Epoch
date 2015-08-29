@@ -13,14 +13,16 @@ public class SpotPlace implements Parcelable{
     private String feature;
     private String reminder;
     private String trafficInfo;
+    private String phoneNumber;
 
-    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo) {
+    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo, String phoneNumber) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.address = address;
         this.feature = feature;
         this.reminder = reminder;
         this.trafficInfo = trafficInfo;
+        this.phoneNumber = phoneNumber;
     }
 
     protected SpotPlace(Parcel in) {
@@ -30,6 +32,7 @@ public class SpotPlace implements Parcelable{
         feature = in.readString();
         reminder = in.readString();
         trafficInfo = in.readString();
+        phoneNumber = in.readString();
     }
 
     public String getTitle() {
@@ -80,6 +83,14 @@ public class SpotPlace implements Parcelable{
         this.trafficInfo = trafficInfo;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public static final Creator<SpotPlace> CREATOR = new Creator<SpotPlace>() {
         @Override
         public SpotPlace createFromParcel(Parcel in) {
@@ -105,5 +116,6 @@ public class SpotPlace implements Parcelable{
         dest.writeString(feature);
         dest.writeString(reminder);
         dest.writeString(trafficInfo);
+        dest.writeString(phoneNumber);
     }
 }
