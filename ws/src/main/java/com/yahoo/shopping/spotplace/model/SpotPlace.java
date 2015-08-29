@@ -19,7 +19,13 @@ public class SpotPlace {
     private long id;
     private SpotPlaceType type;
     private String title;
+
+    @Column(length = 2048)
     private String address;
+
+    @Column(length = 2048)
+    private String imageUrl;
+
     private String phoneNumber;
 
     @Column(length = 2048)
@@ -37,10 +43,11 @@ public class SpotPlace {
     public SpotPlace() {
     }
 
-    public SpotPlace(SpotPlaceType type, String title, String address, String phoneNumber, String feature, String trafficInfo, String reminder) {
+    public SpotPlace(SpotPlaceType type, String title, String address, String imageUrl, String phoneNumber, String feature, String trafficInfo, String reminder) {
         this.type = type;
         this.title = title;
         this.address = address;
+        this.imageUrl = imageUrl;
         this.phoneNumber = phoneNumber;
         this.feature = feature;
         this.trafficInfo = trafficInfo;
@@ -77,6 +84,14 @@ public class SpotPlace {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getPhoneNumber() {
