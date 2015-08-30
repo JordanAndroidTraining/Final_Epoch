@@ -3,7 +3,9 @@ package com.yahoo.shopping.epoch.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -54,6 +57,12 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         View view = inflater.inflate(R.layout.fragment_spot_show, null);
 
         mVH.svContainer = (ScrollView) view.findViewById(R.id.fragment_spot_show_sv_container);
+        mVH.llFavStar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_ll_favstar);
+        mVH.ivFavStar1 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar1);
+        mVH.ivFavStar2 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar2);
+        mVH.ivFavStar3 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar3);
+        mVH.ivFavStar4 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar4);
+        mVH.ivFavStar5 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar5);
         mVH.tvTitle = (TextView) view.findViewById(R.id.fragment_spot_show_tv_title);
         mVH.tvAddress = (TextView) view.findViewById(R.id.fragment_spot_show_tv_address);
         mVH.tvFeature = (TextView) view.findViewById(R.id.fragment_spot_show_tv_feature);
@@ -75,13 +84,22 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        params.topMargin = (int) (metrics.heightPixels - (35 + 28 + 7) * metrics.density);
+        params.topMargin = (int) (metrics.heightPixels - (35 + 28 + 7 + 15) * metrics.density);
 
         view.requestLayout();
     }
 
+    private void setFavStarRating(int rating) {
+        mVH.ivFavStar1.setImageResource(rating >= 1 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        mVH.ivFavStar2.setImageResource(rating >= 2 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        mVH.ivFavStar3.setImageResource(rating >= 3 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        mVH.ivFavStar4.setImageResource(rating >= 4 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        mVH.ivFavStar5.setImageResource(rating >= 5 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+    }
+
     private void initScrollView() {
-        setTitleMargin(mVH.tvTitle);
+        setTitleMargin(mVH.llFavStar);
+        setFavStarRating(mPlace.getRating());
 
         mVH.tvTitle.setText(mPlace.getTitle());
         mVH.tvAddress.setText(mPlace.getAddress());
@@ -90,7 +108,6 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         mVH.tvTrafficInfo.setText(mPlace.getTrafficInfo());
 
         Picasso.with(mContext).load(mPlace.getImageUrl()).into(mVH.ivImage);
-
         mVH.svContainer.setOnScrollChangeListener(this);
     }
 
@@ -146,24 +163,40 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
 
     @Override
     public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        // prepare background source bmp
-        if (mVH.bmBG == null) {
-            mVH.bmBG = ((BitmapDrawable)mVH.ivImage.getDrawable()).getBitmap();
+        int containerHeight = mVH.svContainer.getHeight();
+        // Blur Background
+        Drawable draw = mVH.ivImage.getDrawable();
+        if (draw != null) {
+            // prepare background source bmp
+            if (mVH.bmBG == null) {
+                mVH.bmBG = ((BitmapDrawable)draw).getBitmap();
+            }
+            // calculate radius
+            int radius = 1 + (MAX_RADIUS * scrollY / containerHeight);
+            if (mRadius != radius) {
+                mRadius = radius;
+                mVH.ivImage.setImageBitmap(getBlurBitmap(mVH.bmBG, radius));
+            }
         }
-        // calculate radius
-        int radius = 1 + (MAX_RADIUS * scrollY / mVH.svContainer.getHeight());
-        if (mRadius != radius) {
-            mRadius = radius;
-            mVH.ivImage.setImageBitmap(getBlurBitmap(mVH.bmBG, radius));
-        }
+        // Alpha Toolbar
+        int alpha = 100 * scrollY / containerHeight;
+        mVH.rlToolbar.setBackgroundColor(Color.argb(alpha, 0, 0, 0));
     }
 
     private Bitmap getBlurBitmap(Bitmap bmp, int radius) {
+        if (radius < 1) { radius = 1; }
+        if (radius > 25) { radius = 25; }
         return new BlurTransformation(mContext, radius).transform(bmp.copy(bmp.getConfig(), true));
     }
 
     private class ViewHolder {
         public ScrollView svContainer;
+        public LinearLayout llFavStar;
+        public ImageView ivFavStar1;
+        public ImageView ivFavStar2;
+        public ImageView ivFavStar3;
+        public ImageView ivFavStar4;
+        public ImageView ivFavStar5;
         public TextView tvTitle;
         public TextView tvAddress;
         public TextView tvFeature;

@@ -7,4 +7,6 @@
     <dimen name="text_size_large">28dp</dimen>
     <dimen name="text_size_medium">15dp</dimen>
     <dimen name="text_size_small">12dp</dimen>
+    <dimen name="favstar_size">32dp</dimen>
+    <dimen name="favstar_margin">5dp</dimen>
 </resources>

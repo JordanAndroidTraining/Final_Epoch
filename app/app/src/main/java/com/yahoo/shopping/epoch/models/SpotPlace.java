@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * Created by jamesyan on 8/28/15.
  */
 public class SpotPlace implements Parcelable{
+    private int rating;
     private String title;
     private String address;
     private String imageUrl;
@@ -20,7 +21,7 @@ public class SpotPlace implements Parcelable{
     private String trafficInfo;
     private String phoneNumber;
 
-    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo, String phoneNumber) {
+    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo, String phoneNumber, int rating) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.address = address;
@@ -28,9 +29,11 @@ public class SpotPlace implements Parcelable{
         this.reminder = reminder;
         this.trafficInfo = trafficInfo;
         this.phoneNumber = phoneNumber;
+        this.rating = rating;
     }
 
     protected SpotPlace(Parcel in) {
+        rating = in.readInt();
         title = in.readString();
         address = in.readString();
         imageUrl = in.readString();
@@ -38,6 +41,14 @@ public class SpotPlace implements Parcelable{
         reminder = in.readString();
         trafficInfo = in.readString();
         phoneNumber = in.readString();
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public String getTitle() {
@@ -116,8 +127,9 @@ public class SpotPlace implements Parcelable{
         String reminder = data.optString("reminder","");
         String trafficInfo = data.optString("trafficInfo","");
         String phoneNumber = data.optString("phoneNumber","");
+        int rating = data.optInt("rating", 0);
 
-        SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber);
+        SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber,rating);
         return spot;
     }
 
@@ -138,6 +150,7 @@ public class SpotPlace implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(rating);
         dest.writeString(title);
         dest.writeString(address);
         dest.writeString(imageUrl);
@@ -146,4 +159,5 @@ public class SpotPlace implements Parcelable{
         dest.writeString(trafficInfo);
         dest.writeString(phoneNumber);
     }
+
 }
