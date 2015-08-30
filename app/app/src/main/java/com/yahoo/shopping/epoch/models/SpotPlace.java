@@ -3,6 +3,11 @@ package com.yahoo.shopping.epoch.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 /**
  * Created by jamesyan on 8/28/15.
  */
@@ -102,6 +107,29 @@ public class SpotPlace implements Parcelable{
             return new SpotPlace[size];
         }
     };
+
+    public static SpotPlace parseFromJSONObject(JSONObject data){
+        String title = data.optString("title","");
+        String address = data.optString("address","");
+        String imageUrl = data.optString("imageUrl","");
+        String feature = data.optString("feature","");
+        String reminder = data.optString("reminder","");
+        String trafficInfo = data.optString("trafficInfo","");
+        String phoneNumber = data.optString("phoneNumber","");
+
+        SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber);
+        return spot;
+    }
+
+    public static ArrayList<SpotPlace> parseFromJSONArray(JSONArray data){
+        ArrayList<SpotPlace> returnList = new ArrayList<>();
+        for(int i = 0; i < data.length() ; i++) {
+            JSONObject row = data.optJSONObject(i);
+            SpotPlace spot = SpotPlace.parseFromJSONObject(row);
+            returnList.add(spot);
+        }
+        return  returnList;
+    }
 
     @Override
     public int describeContents() {
