@@ -3,6 +3,11 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="country_side">農村體驗</string>
+    <string name="farm_visit">農場之旅</string>
+    <string name="spot">文化景點</string>
+    <string name="aborigines">原住民文化</string>
+
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
