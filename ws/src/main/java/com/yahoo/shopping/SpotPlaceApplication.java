@@ -129,11 +129,9 @@ public class SpotPlaceApplication implements CommandLineRunner {
                                 SpotPlaceResource.DataType.CSV,
                                 new HashMap<SpotPlace.Fields, String>() {
                                     {
-                                        put(SpotPlace.Fields.Title, "FarmNm_CH");
-                                        put(SpotPlace.Fields.Address, "Address_CH");
-                                        put(SpotPlace.Fields.PhoneNumber, "TEL");
-                                        put(SpotPlace.Fields.Feature, "Feature_CH");
-                                        put(SpotPlace.Fields.TrafficInfo, "Address_CH");
+                                        put(SpotPlace.Fields.Title, "2");
+                                        put(SpotPlace.Fields.Address, "4");
+                                        put(SpotPlace.Fields.Feature, "5");
                                     }
                                 })
                 ));

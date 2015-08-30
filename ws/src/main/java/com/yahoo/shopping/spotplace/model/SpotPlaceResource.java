@@ -12,12 +12,21 @@ public class SpotPlaceResource {
 
     private String url;
     private DataType type;
+    private String encoding;
     private Map<SpotPlace.Fields, String> fiedlsMapping;
 
     public SpotPlaceResource(String url, DataType type, HashMap<SpotPlace.Fields, String> fiedlsMapping) {
         this.url = url;
         this.type = type;
         this.fiedlsMapping = fiedlsMapping;
+        this.encoding = "UTF-8";
+    }
+
+    public SpotPlaceResource(String url, DataType type, HashMap<SpotPlace.Fields, String> fiedlsMapping, String encoding) {
+        this.url = url;
+        this.type = type;
+        this.fiedlsMapping = fiedlsMapping;
+        this.encoding = encoding;
     }
 
     public String getUrl() {
@@ -34,6 +43,14 @@ public class SpotPlaceResource {
 
     public void setType(DataType type) {
         this.type = type;
+    }
+
+    public String getEncoding() {
+        return encoding;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
 
     public Map<SpotPlace.Fields, String> getFiedlsMapping() {

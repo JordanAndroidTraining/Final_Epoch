@@ -6,12 +6,14 @@ import com.yahoo.shopping.spotplace.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -103,24 +105,86 @@ public class SpotPlaceService {
         return "";
     }
 
+    private boolean checkRecordExisted(String title, SpotPlaceType type) {
+        List<SpotPlace> places = repository.findByTitleAndType(title, type);
+        if (places == null || (places.size() == 0)) {
+            return false;
+        }
+
+        boolean emptyImage = false;
+        for (SpotPlace place : places) {
+            if (place.getImageUrl().isEmpty()) {
+                emptyImage = true;
+            }
+        }
+
+        if (emptyImage) {
+            for (SpotPlace place : places) {
+                repository.delete(place.getId());
+            }
+            return false;
+        }
+
+        logger.info(title + " existed");
+
+        return true;
+    }
+
     private void processResource_CSVType(SpotPlaceType type, SpotPlaceResource resource) {
         RestTemplate template = new RestTemplate();
+        template.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName(resource.getEncoding())));
         String result = template.getForObject(resource.getUrl(), String.class);
 
         String[] list = result.split("\n");
         for (int i = 1; i < list.length; i++) {
             String[] record = list[i].split(",");
 
-            if (record.length >= 5) {
-                String title = record[2];
-                String address = record[4];
-                String feature = record[5];
-                String imageUrl = findImageByGoogleSearch(title);
+            Map<SpotPlace.Fields, String> fiedlsMapping = resource.getFiedlsMapping();
+            try {
+                String title = "";
+                if (fiedlsMapping.containsKey(SpotPlace.Fields.Title)) {
+                    title = record[Integer.parseInt(fiedlsMapping.get(SpotPlace.Fields.Title))];
+                }
 
-                SpotPlace model = new SpotPlace(type, title, imageUrl, address, "", feature, "", "");
-                repository.save(model);
+                if (title.isEmpty()) {
+                    throw new RuntimeException("Resource title cannot empty");
+                }
 
-                logger.info("Fetch: " + title);
+                if (!checkRecordExisted(title, type)) {
+                    String address = "";
+                    if (fiedlsMapping.containsKey(SpotPlace.Fields.Address)) {
+                        address = record[Integer.parseInt(fiedlsMapping.get(SpotPlace.Fields.Address))];
+                    }
+
+                    String phoneNumber = "";
+                    if (fiedlsMapping.containsKey(SpotPlace.Fields.PhoneNumber)) {
+                        phoneNumber = record[Integer.parseInt(fiedlsMapping.get(SpotPlace.Fields.PhoneNumber))];
+                    }
+
+                    String feature = "";
+                    if (fiedlsMapping.containsKey(SpotPlace.Fields.Feature)) {
+                        feature = record[Integer.parseInt(fiedlsMapping.get(SpotPlace.Fields.Feature))];
+                    }
+
+                    String reminder = "";
+                    if (fiedlsMapping.containsKey(SpotPlace.Fields.Reminder)) {
+                        reminder = record[Integer.parseInt(fiedlsMapping.get(SpotPlace.Fields.Reminder))];
+                    }
+
+                    String trafficInfo = "";
+                    if (fiedlsMapping.containsKey(SpotPlace.Fields.TrafficInfo)) {
+                        trafficInfo = record[Integer.parseInt(fiedlsMapping.get(SpotPlace.Fields.TrafficInfo))];
+                    }
+
+                    String imageUrl = findImageByGoogleSearch(title);
+
+                    SpotPlace model = new SpotPlace(type, title, address, imageUrl, phoneNumber, feature, trafficInfo, reminder);
+                    repository.save(model);
+
+                    logger.info("Fetch: " + title);
+                }
+            } catch(Exception e) {
+                logger.info(e.toString());
             }
         }
     }
@@ -150,37 +214,43 @@ public class SpotPlaceService {
                         title = element.get(fiedlsMapping.get(SpotPlace.Fields.Title)).asText();
                     }
 
-                    String address = "";
-                    if (fiedlsMapping.containsKey(SpotPlace.Fields.Address)) {
-                        address = element.get(fiedlsMapping.get(SpotPlace.Fields.Address)).asText();
+                    if (title.isEmpty()) {
+                        throw new RuntimeException("Resource title cannot empty");
                     }
 
-                    String phoneNumber = "";
-                    if (fiedlsMapping.containsKey(SpotPlace.Fields.PhoneNumber)) {
-                        phoneNumber = element.get(fiedlsMapping.get(SpotPlace.Fields.PhoneNumber)).asText();
+                    if (!checkRecordExisted(title, type)) {
+                        String address = "";
+                        if (fiedlsMapping.containsKey(SpotPlace.Fields.Address)) {
+                            address = element.get(fiedlsMapping.get(SpotPlace.Fields.Address)).asText();
+                        }
+
+                        String phoneNumber = "";
+                        if (fiedlsMapping.containsKey(SpotPlace.Fields.PhoneNumber)) {
+                            phoneNumber = element.get(fiedlsMapping.get(SpotPlace.Fields.PhoneNumber)).asText();
+                        }
+
+                        String feature = "";
+                        if (fiedlsMapping.containsKey(SpotPlace.Fields.Feature)) {
+                            feature = element.get(fiedlsMapping.get(SpotPlace.Fields.Feature)).asText();
+                        }
+
+                        String reminder = "";
+                        if (fiedlsMapping.containsKey(SpotPlace.Fields.Reminder)) {
+                            reminder = element.get(fiedlsMapping.get(SpotPlace.Fields.Reminder)).asText();
+                        }
+
+                        String trafficInfo = "";
+                        if (fiedlsMapping.containsKey(SpotPlace.Fields.TrafficInfo)) {
+                            trafficInfo = element.get(fiedlsMapping.get(SpotPlace.Fields.TrafficInfo)).asText();
+                        }
+
+                        String imageUrl = findImageByGoogleSearch(title);
+
+                        SpotPlace model = new SpotPlace(type, title, address, imageUrl, phoneNumber, feature, trafficInfo, reminder);
+                        repository.save(model);
+
+                        logger.info("Fetch: " + title);
                     }
-
-                    String feature = "";
-                    if (fiedlsMapping.containsKey(SpotPlace.Fields.Feature)) {
-                        feature = element.get(fiedlsMapping.get(SpotPlace.Fields.Feature)).asText();
-                    }
-
-                    String reminder = "";
-                    if (fiedlsMapping.containsKey(SpotPlace.Fields.Reminder)) {
-                        reminder = element.get(fiedlsMapping.get(SpotPlace.Fields.Reminder)).asText();
-                    }
-
-                    String trafficInfo = "";
-                    if (fiedlsMapping.containsKey(SpotPlace.Fields.TrafficInfo)) {
-                        trafficInfo = element.get(fiedlsMapping.get(SpotPlace.Fields.TrafficInfo)).asText();
-                    }
-
-                    String imageUrl = findImageByGoogleSearch(title);
-
-                    SpotPlace model = new SpotPlace(type, title, address, imageUrl, phoneNumber, feature, trafficInfo, reminder);
-                    repository.save(model);
-
-                    logger.info("Fetch: " + title);
                 }
             }
         }

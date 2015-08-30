@@ -15,6 +15,8 @@ import java.util.List;
 public interface SpotPlaceRepository extends CrudRepository<SpotPlace, Long> {
     Page<SpotPlace> findByType(SpotPlaceType type, Pageable pageable);
 
+    List<SpotPlace> findByTitleAndType(String title, SpotPlaceType type);
+
     @Query("select sp from SpotPlace sp where (title like :keyword or address like :keyword or feature like :keyword)")
     Page<SpotPlace> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
