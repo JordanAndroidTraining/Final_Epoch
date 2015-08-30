@@ -76,7 +76,7 @@ public class EpochActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d();
+                Log.d("getSpotListByType Error",responseString);
             }
         });
     }
