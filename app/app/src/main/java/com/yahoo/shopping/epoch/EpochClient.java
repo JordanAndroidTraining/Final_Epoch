@@ -17,14 +17,17 @@ public class EpochClient {
         return new EpochClient();
     }
 
-    public void getSearchResult(String keyword){
-        String apiUrl = REST_BASE_URL + "";
+    public void getSpotListByKeyword(String keyword,AsyncHttpResponseHandler responseHandler){
+        String apiUrl = REST_BASE_URL + "resources/search";
+        RequestParams params = new RequestParams();
+        params.put("keyword", keyword);
+        client.get(apiUrl, params, responseHandler);
     }
 
     public void getSpotListByType(String type,AsyncHttpResponseHandler responseHandler){
         String apiUrl = REST_BASE_URL + "resources";
         RequestParams params = new RequestParams();
-        params.put("type",type);
+        params.put("type", type);
         client.get(apiUrl, params, responseHandler);
     }
 
