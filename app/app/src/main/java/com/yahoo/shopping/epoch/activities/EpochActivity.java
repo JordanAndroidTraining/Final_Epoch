@@ -92,9 +92,7 @@ public class EpochActivity extends AppCompatActivity{
                 mClient.getSpotListByKeyword(mSearchKeyword, new EpochHttpResponseHandler());
                 break;
         }
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
