@@ -1,7 +1,5 @@
 package com.yahoo.shopping.epoch;
 
-import android.util.Log;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -10,7 +8,7 @@ import com.loopj.android.http.RequestParams;
  * Created by jordanhsu on 8/30/15.
  */
 public class EpochClient {
-    public final String REST_BASE_URL = "http://192.168.1.111:8080/";
+    public final String REST_BASE_URL = "http://10.0.3.2:8080/";
     private AsyncHttpClient client = new AsyncHttpClient();
 
     public static EpochClient getInstance(){
