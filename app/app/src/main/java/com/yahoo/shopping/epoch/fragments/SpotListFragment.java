@@ -47,6 +47,7 @@ public class SpotListFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), SpotShowActivity.class);
                 intent.putParcelableArrayListExtra(AppConstants.INTENT_SPOT_PLACES, mSpotPlaces);
+                intent.putExtra(AppConstants.INTENT_SPOT_SELECT_PLACES_INDEX,position);
                 startActivity(intent);
             }
         });
