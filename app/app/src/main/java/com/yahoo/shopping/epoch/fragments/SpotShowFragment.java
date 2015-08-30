@@ -27,15 +27,18 @@ import com.squareup.picasso.Picasso;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.models.SpotPlace;
+import com.yahoo.shopping.epoch.utils.GoogleImageResult;
+import com.yahoo.shopping.epoch.utils.GoogleImageService;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
 /**
  * Created by jamesyan on 8/28/15.
  */
-public class SpotShowFragment extends Fragment implements View.OnScrollChangeListener, View.OnClickListener {
+public class SpotShowFragment extends Fragment implements View.OnScrollChangeListener, View.OnClickListener, GoogleImageService.OnFetchedListener {
 
     private final int MAX_RADIUS = 25;
     private int mRadius = 0;
@@ -43,12 +46,14 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
     private Context mContext;
     private SpotPlace mPlace;
     private ViewHolder mVH = new ViewHolder();
+    private GoogleImageService mGIS = new GoogleImageService();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPlace = getArguments().getParcelable(AppConstants.ARGUMENTS_SPOT_PLACE);
+        mGIS.fetchImages(mPlace.getTitle(), this);
     }
 
     @Nullable
@@ -73,8 +78,9 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         mVH.ivMakeCall = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecall);
         mVH.rlToolbar = (RelativeLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
 
-        initScrollView();
         initToolbar();
+        initScrollView();
+        initBackgorund();
 
         return view;
     }
@@ -97,6 +103,16 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         mVH.ivFavStar5.setImageResource(rating >= 5 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
     }
 
+    private void initToolbar() {
+        mVH.rlToolbar.bringToFront();
+
+        mVH.ivMakeCall.setTag(mPlace.getPhoneNumber());
+        mVH.ivMakeCall.setOnClickListener(this);
+
+        mVH.ivViewMap.setTag(mPlace.getAddress());
+        mVH.ivViewMap.setOnClickListener(this);
+    }
+
     private void initScrollView() {
         setTitleMargin(mVH.llFavStar);
         setFavStarRating(mPlace.getRating());
@@ -107,18 +123,19 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         mVH.tvReminder.setText(mPlace.getReminder());
         mVH.tvTrafficInfo.setText(mPlace.getTrafficInfo());
 
-        Picasso.with(mContext).load(mPlace.getImageUrl()).into(mVH.ivImage);
         mVH.svContainer.setOnScrollChangeListener(this);
     }
 
-    private void initToolbar() {
-        mVH.rlToolbar.bringToFront();
+    private void initBackgorund() {
+        Picasso.with(mContext).load(mPlace.getImageUrl()).into(mVH.ivImage);
+    }
 
-        mVH.ivMakeCall.setTag(mPlace.getPhoneNumber());
-        mVH.ivMakeCall.setOnClickListener(this);
-
-        mVH.ivViewMap.setTag(mPlace.getAddress());
-        mVH.ivViewMap.setOnClickListener(this);
+    @Override
+    public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
+        if (imageResults.size() > 0) {
+            mPlace.setImageUrl(imageResults.get(0).url);
+            initBackgorund();
+        }
     }
 
     @Override
