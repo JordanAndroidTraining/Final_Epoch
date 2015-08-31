@@ -6,6 +6,7 @@
   * with rating
 * Favorite  (using share preference)
 * paging (infinite scroll)
+* Virtual type in side bar
 
 ### James
 * 修圖

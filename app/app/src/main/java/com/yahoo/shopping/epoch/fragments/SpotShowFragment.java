@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.yahoo.shopping.epoch.R;
+import com.yahoo.shopping.epoch.activities.CommentActivity;
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.models.SpotPlace;
 import com.yahoo.shopping.epoch.utils.GoogleImageResult;
@@ -77,6 +79,7 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         mVH.ivViewMap = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_viewmap);
         mVH.ivMakeCall = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecall);
         mVH.rlToolbar = (RelativeLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
+        mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
 
         initToolbar();
         initScrollView();
@@ -111,6 +114,9 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
 
         mVH.ivViewMap.setTag(mPlace.getAddress());
         mVH.ivViewMap.setOnClickListener(this);
+
+        mVH.ivMakeComment.setTag(mPlace.getResourceId());
+        mVH.ivMakeComment.setOnClickListener(this);
     }
 
     private void initScrollView() {
@@ -154,6 +160,10 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
                 mVH.ivViewMap.startAnimation(animMagnify);
                 launchGoogleMap((String) v.getTag());
                 break;
+            case R.id.fragment_spot_show_iv_makecomment:
+                Intent intent = new Intent(getActivity(), CommentActivity.class);
+                intent.putExtra(AppConstants.INTENT_COMMENT_RESOURCE_ID, (int) v.getTag());
+                startActivity(intent);
         }
     }
 
@@ -224,5 +234,6 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         public ImageView ivViewMap;
         public ImageView ivMakeCall;
         public Bitmap bmBG;
+        public ImageView ivMakeComment;
     }
 }

@@ -2,6 +2,7 @@ package com.yahoo.shopping.epoch.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
  */
 public class SpotPlace implements Parcelable{
     private int rating;
+    private int resourceId;
     private String title;
     private String address;
     private String imageUrl;
@@ -21,7 +23,7 @@ public class SpotPlace implements Parcelable{
     private String trafficInfo;
     private String phoneNumber;
 
-    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo, String phoneNumber, int rating) {
+    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo, String phoneNumber, int rating,int resourceId) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.address = address;
@@ -30,9 +32,11 @@ public class SpotPlace implements Parcelable{
         this.trafficInfo = trafficInfo;
         this.phoneNumber = phoneNumber;
         this.rating = rating;
+        this.resourceId = resourceId;
     }
 
     protected SpotPlace(Parcel in) {
+        resourceId = in.readInt();
         rating = in.readInt();
         title = in.readString();
         address = in.readString();
@@ -41,6 +45,14 @@ public class SpotPlace implements Parcelable{
         reminder = in.readString();
         trafficInfo = in.readString();
         phoneNumber = in.readString();
+    }
+
+    public int getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(int resourceId) {
+        this.resourceId = resourceId;
     }
 
     public int getRating() {
@@ -128,8 +140,9 @@ public class SpotPlace implements Parcelable{
         String trafficInfo = data.optString("trafficInfo","");
         String phoneNumber = data.optString("phoneNumber","");
         int rating = data.optInt("rating", 0);
+        int resourceId = data.optInt("id",0);
 
-        SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber,rating);
+        SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber,rating,resourceId);
         return spot;
     }
 
@@ -150,6 +163,7 @@ public class SpotPlace implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(resourceId);
         dest.writeInt(rating);
         dest.writeString(title);
         dest.writeString(address);
