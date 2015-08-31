@@ -1,12 +1,12 @@
 ## To do && delv note
 ### Jordan Todo
-* UI
-* random
-* Comment
-  * with rating
-* Favorite  (using share preference)
-* paging (infinite scroll)
-* Virtual type in side bar
+* [ ] UI
+* [ ] random
+* [x] Comment
+  * [x] with rating
+* [ ] Favorite  (using share preference)
+* [x] Virtual type in side bar
+* [ ] paging (infinite scroll)
 
 ### James
 * 修圖

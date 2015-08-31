@@ -135,18 +135,24 @@ public class EpochActivity extends AppCompatActivity{
         // get selected type
         String clickedTitle = (String) menuItem.getTitle();
         String prevTripType = mTripType;
+
         if(clickedTitle.equals(getString(R.string.country_side))){
             mTripType = AppConstants.TRIP_TYPE_COUNTRY_SIDE;
         }
-        if(clickedTitle.equals(getString(R.string.farm_visit))){
+        else if(clickedTitle.equals(getString(R.string.farm_visit))){
             mTripType = AppConstants.TRIP_TYPE_FARM_VISIT;
         }
-        if(clickedTitle.equals(getString(R.string.spot))){
+        else if(clickedTitle.equals(getString(R.string.spot))){
             mTripType = AppConstants.TRIP_TYPE_SPOT;
         }
-        if(clickedTitle.equals(getString(R.string.aborigines))){
+        else if(clickedTitle.equals(getString(R.string.aborigines))){
             mTripType = AppConstants.TRIP_TYPE_ABORIGINES;
         }
+        // virtual type => use search
+        else {
+            searchSubmitHandler(clickedTitle);
+        }
+//        Log.d("JordanTest","clickedTitle: " + clickedTitle);
 
         //if select different type => re-render list
         if(!prevTripType.equals(mTripType)){
