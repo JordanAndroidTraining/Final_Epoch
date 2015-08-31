@@ -37,6 +37,9 @@ public class SpotPlace {
     @Column(length = 2048)
     private String reminder;
 
+    @Column(columnDefinition = "float default '0.0'")
+    private float averageRating;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments;
 
@@ -128,6 +131,14 @@ public class SpotPlace {
 
     public List<Comment> getComments() {
         return Collections.unmodifiableList(comments);
+    }
+
+    public float getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(float averageRating) {
+        this.averageRating = averageRating;
     }
 
     public void addComment(Comment comment) {

@@ -17,6 +17,7 @@ public class Comment {
     private String subject;
     private String comment;
     private String imageUrl;
+    private int rating;
 
     public Comment() {
 
@@ -26,6 +27,14 @@ public class Comment {
         this.subject = subject;
         this.comment = comment;
         this.imageUrl = imageUrl;
+        this.rating = 0;
+    }
+
+    public Comment(String subject, String comment, String imageUrl, int rating) {
+        this.subject = subject;
+        this.comment = comment;
+        this.imageUrl = imageUrl;
+        this.rating = rating;
     }
 
     public long getId() {
@@ -58,5 +67,13 @@ public class Comment {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

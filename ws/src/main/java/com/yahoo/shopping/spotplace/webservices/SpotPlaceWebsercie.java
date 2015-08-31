@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * Created by jamesyan on 8/27/15.
  */
@@ -39,8 +37,9 @@ public class SpotPlaceWebsercie {
     public void createCommentById(@PathVariable long id,
                                   @RequestParam("subject") String subject,
                                   @RequestParam("comment") String comment,
-                                  @RequestParam("imageUrl") String imageUrl) {
-        service.addCommentsById(id, new Comment(subject, comment, imageUrl));
+                                  @RequestParam("imageUrl") String imageUrl,
+                                  @RequestParam(value = "rating", defaultValue = "0") int rating) {
+        service.addCommentsById(id, new Comment(subject, comment, imageUrl, rating));
     }
 
     @RequestMapping(value = "resources/search", method = RequestMethod.GET)

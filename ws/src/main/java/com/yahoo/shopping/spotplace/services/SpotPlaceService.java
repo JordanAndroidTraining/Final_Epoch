@@ -47,6 +47,21 @@ public class SpotPlaceService {
 
     public void addCommentsById(long id, Comment comment) {
         SpotPlace place = repository.findOne(id);
+
+        int total = 0;
+        int totalRecords = 0;
+        for (Comment commentObj: place.getComments()) {
+            if (commentObj.getRating() > 0) {
+                total += commentObj.getRating();
+                totalRecords ++;
+            }
+        }
+
+        if (totalRecords != 0) {
+            place.setAverageRating(total / totalRecords);
+        } else {
+            place.setAverageRating(comment.getRating());
+        }
         place.addComment(comment);
 
         repository.save(place);
@@ -76,9 +91,9 @@ public class SpotPlaceService {
     }
 
     private String findImageByGoogleSearch(String keyword) {
-        String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + URLEncoder.encode(keyword) + "&imgsz=xlarge";
+        String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + URLEncoder.encode("風景照 " + keyword);
 
-        for (int retry = 0; retry < 5; retry++) {
+        for (int retry = 0; retry < 1; retry++) {
             RestTemplate template = new RestTemplate();
             String result = template.getForObject(url, String.class);
 
@@ -99,7 +114,7 @@ public class SpotPlaceService {
                     logger.info("retry (" + retry + "): " + url);
                 }
             }
-            waitForNextFetch(60);
+            waitForNextFetch(15);
         }
 
         return "";
@@ -183,7 +198,7 @@ public class SpotPlaceService {
 
                     logger.info("Fetch: " + title);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 logger.info(e.toString());
             }
         }
