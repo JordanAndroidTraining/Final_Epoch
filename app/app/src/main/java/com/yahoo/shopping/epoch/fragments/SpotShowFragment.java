@@ -133,12 +133,13 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
     }
 
     private void initBackgorund() {
+        mVH.ivImage.setImageResource(0);
         Picasso.with(mContext).load(mPlace.getImageUrl()).into(mVH.ivImage);
     }
 
     @Override
     public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
-        if (imageResults.size() > 0) {
+        if ((imageResults.size() > 0) && (mVH.ivImage.getDrawable() == null)) {
             mPlace.setImageUrl(imageResults.get(0).url);
             initBackgorund();
         }

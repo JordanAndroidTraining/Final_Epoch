@@ -1,5 +1,7 @@
 package com.yahoo.shopping.epoch.utils;
 
+import android.util.Log;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -79,12 +81,12 @@ public class GoogleImageService {
 
         // do async http request
         AsyncHttpClient client = new AsyncHttpClient();
+        Log.d("XXX: QueryURL:", url);
         client.get(url, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
-                    response = response.getJSONObject("responseData");
                     // load images from JSONArray
                     JSONArray results = response.getJSONArray("results");
                     mImages.addAll(GoogleImageResult.fromJSONArray(results));
@@ -97,6 +99,7 @@ public class GoogleImageService {
                         listener.onFetched(mImages, mNextPageStartIndex);
                     }
                 } catch (JSONException e) {
+                    Log.d("XXX: QueryERR:", response.toString());
                     e.printStackTrace();
                 }
             }
@@ -104,6 +107,7 @@ public class GoogleImageService {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                Log.d("XXX: QueryERR:", throwable.getMessage());
             }
         });
     }
