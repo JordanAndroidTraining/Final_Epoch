@@ -5,6 +5,10 @@ import com.yahoo.shopping.spotplace.model.SpotPlaceRepository;
 import com.yahoo.shopping.spotplace.model.SpotPlaceResource;
 import com.yahoo.shopping.spotplace.model.SpotPlaceType;
 import com.yahoo.shopping.spotplace.services.SpotPlaceService;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 
 import javax.persistence.EntityManagerFactory;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -175,6 +181,28 @@ public class SpotPlaceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+//        RestTemplate template = new RestTemplate();
+//        String result = template.getForObject("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=%E7%91%9E%E5%A3%AB%E9%84%89%E6%9D%91", String.class);
+
+        String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=%E7%91%9E%E5%A3%AB%E9%84%89%E6%9D%91";
+
+        HttpGet request = new HttpGet(url);
+        request.addHeader("User-Agent", "Mozilla/5.0 (compatible; U; ABrowse 0.6; Syllable) AppleWebKit/420+ (KHTML, like Gecko)");
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = client.execute(request);
+
+        BufferedReader rd = new BufferedReader(
+                new InputStreamReader(response.getEntity().getContent()));
+
+        StringBuffer result = new StringBuffer();
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
+        }
+
+        System.out.println(result.toString());
+
 //        for (Map.Entry<SpotPlaceType, List<SpotPlaceResource>> entry : getColdStartResourcesInfo().entrySet()) {
 //            SpotPlaceType type = entry.getKey();
 //            List<SpotPlaceResource> resources = entry.getValue();

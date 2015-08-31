@@ -51,4 +51,9 @@ public class SpotPlaceWebsercie {
         }
         return service.searchResourcesByKeyword(keyword, pageIndex);
     }
+
+    @RequestMapping(value = "resources/{id}/imageUrl", method = RequestMethod.POST)
+    public void updateImageUrlById(@PathVariable("id") long id, @RequestParam("imageUrl") String imageUrl) {
+        service.updateImageUrlById(id, imageUrl);
+    }
 }

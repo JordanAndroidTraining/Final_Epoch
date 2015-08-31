@@ -44,6 +44,14 @@ public class SpotPlaceService {
         return repository.findByKeywordAndType("%" + keyword + "%", type, new PageRequest(pageIndex, 20));
     }
 
+    public void updateImageUrlById(long id, String imageUrl) {
+        SpotPlace place = repository.findOne(id);
+
+        if (place != null) {
+            place.setImageUrl(imageUrl);
+            repository.save(place);
+        }
+    }
 
     public void addCommentsById(long id, Comment comment) {
         SpotPlace place = repository.findOne(id);
@@ -91,7 +99,7 @@ public class SpotPlaceService {
     }
 
     private String findImageByGoogleSearch(String keyword) {
-        String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + URLEncoder.encode("風景照 " + keyword);
+        String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + URLEncoder.encode(keyword);
 
         for (int retry = 0; retry < 1; retry++) {
             RestTemplate template = new RestTemplate();
