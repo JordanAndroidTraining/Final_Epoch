@@ -14,4 +14,5 @@ public class AppConstants {
     public static final String TRIP_TYPE_ABORIGINES = "Aborigines";
     public static final int RENDER_TYPE_SEARCH = 0;
     public static final int RENDER_TYPE_CLUSTER = 1;
+    public static final String INTENT_COMMENT_RESOURCE_ID = "INTENT_COMMENT_RESOURCE_ID";
 }

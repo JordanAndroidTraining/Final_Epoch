@@ -43,35 +43,35 @@
 
                 <ImageView
                     android:id="@+id/ivSpotListStar1"
-                    android:layout_width="@dimen/spot_list_favstar_size"
-                    android:layout_height="@dimen/spot_list_favstar_size"
+                    android:layout_width="@dimen/spot_list_rating_star_size"
+                    android:layout_height="@dimen/spot_list_rating_star_size"
                     android:src="@drawable/ic_action_favstar0"/>
 
                 <ImageView
                     android:id="@+id/ivSpotListStar2"
-                    android:layout_width="@dimen/spot_list_favstar_size"
-                    android:layout_height="@dimen/spot_list_favstar_size"
+                    android:layout_width="@dimen/spot_list_rating_star_size"
+                    android:layout_height="@dimen/spot_list_rating_star_size"
                     android:src="@drawable/ic_action_favstar0"
                     android:layout_toRightOf="@+id/ivSpotListStar1"/>
 
                 <ImageView
                     android:id="@+id/ivSpotListStar3"
-                    android:layout_width="@dimen/spot_list_favstar_size"
-                    android:layout_height="@dimen/spot_list_favstar_size"
+                    android:layout_width="@dimen/spot_list_rating_star_size"
+                    android:layout_height="@dimen/spot_list_rating_star_size"
                     android:src="@drawable/ic_action_favstar0"
                     android:layout_toRightOf="@+id/ivSpotListStar2"/>
 
                 <ImageView
                     android:id="@+id/ivSpotListStar4"
-                    android:layout_width="@dimen/spot_list_favstar_size"
-                    android:layout_height="@dimen/spot_list_favstar_size"
+                    android:layout_width="@dimen/spot_list_rating_star_size"
+                    android:layout_height="@dimen/spot_list_rating_star_size"
                     android:src="@drawable/ic_action_favstar0"
                     android:layout_toRightOf="@+id/ivSpotListStar3"/>
 
                 <ImageView
                     android:id="@+id/ivSpotListStar5"
-                    android:layout_width="@dimen/spot_list_favstar_size"
-                    android:layout_height="@dimen/spot_list_favstar_size"
+                    android:layout_width="@dimen/spot_list_rating_star_size"
+                    android:layout_height="@dimen/spot_list_rating_star_size"
                     android:src="@drawable/ic_action_favstar0"
                     android:layout_toRightOf="@+id/ivSpotListStar4"/>
             </RelativeLayout>

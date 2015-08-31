@@ -24,6 +24,14 @@
         android:padding="10dp">
 
         <ImageView
+            android:id="@+id/fragment_spot_show_iv_makecomment"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_comment_white"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/fragment_spot_show_iv_viewmap"/>
+
+        <ImageView
             android:id="@+id/fragment_spot_show_iv_viewmap"
             android:layout_width="45dp"
             android:layout_height="45dp"
