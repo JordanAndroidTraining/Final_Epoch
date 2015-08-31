@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="available_blue">#0B42FF</color>
+    <color name="unavailable_grey">#6D6D6D</color>
+    <color name="white">#FFFFFF</color>
+</resources>

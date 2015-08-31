@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:text="留言"
+        android:textColor="@color/unavailable_grey"
         android:gravity="center"
         android:textSize="22sp"
         android:id="@+id/commentPostIconTv"
@@ -29,7 +30,7 @@
     <ImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="@color/material_blue_grey_800"
+        android:background="@mipmap/ic_default_profile_img"
         android:id="@+id/commentProfileImageIv"
         android:layout_below="@+id/commentCloseIconIv"
         android:layout_alignParentLeft="true"
@@ -45,48 +46,49 @@
             android:id="@+id/commentRateIconIv1"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar1"
+            android:src="@drawable/ic_action_favstar0_grey"
             android:layout_centerVertical="true"
              />
         <ImageView
             android:id="@+id/commentRateIconIv2"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar1"
+            android:src="@drawable/ic_action_favstar0_grey"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv1"/>
         <ImageView
             android:id="@+id/commentRateIconIv3"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar1"
+            android:src="@drawable/ic_action_favstar0_grey"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv2"/>
         <ImageView
             android:id="@+id/commentRateIconIv4"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar1"
+            android:src="@drawable/ic_action_favstar0_grey"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv3"/>
         <ImageView
             android:id="@+id/commentRateIconIv5"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar1"
+            android:src="@drawable/ic_action_favstar0_grey"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv4"/>
     </RelativeLayout>
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:id="@+id/editText"
+        android:layout_height="match_parent"
+        android:id="@+id/commentContentEt"
         android:hint="Leave your comment"
         android:gravity="top"
         android:layout_below="@+id/commentProfileImageIv"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/commentPostIconTv"
-        android:layout_alignEnd="@+id/commentPostIconTv" />
+        android:layout_alignEnd="@+id/commentPostIconTv"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

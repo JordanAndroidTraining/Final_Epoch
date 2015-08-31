@@ -29,4 +29,13 @@ public class EpochClient {
         client.get(apiUrl, params, responseHandler);
     }
 
+    public void postCommentByResourceId(int resourceId,String subject, String comment,String imageUrl, int rating , AsyncHttpResponseHandler responseHandler){
+        String apiUrl = REST_BASE_URL + "resources/" + String.valueOf(resourceId) + "/comments";
+        RequestParams params = new RequestParams();
+        params.put("subject",subject);
+        params.put("comment",comment);
+        params.put("imageUrl",imageUrl);
+        params.put("rating",rating);
+        client.post(apiUrl, params, responseHandler);
+    }
 }
