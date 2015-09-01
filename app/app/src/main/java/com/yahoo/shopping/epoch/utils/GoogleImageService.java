@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GoogleImageService {
 
@@ -155,7 +156,7 @@ public class GoogleImageService {
     }
 
     public interface OnFetchedListener {
-        void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage);
+        void onFetched(List<GoogleImageResult> imageResults, int nextPage);
     };
 
 }

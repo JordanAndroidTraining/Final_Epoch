@@ -10,8 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,32 +27,36 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.activities.CommentActivity;
+import com.yahoo.shopping.epoch.adapters.SpotShowPhotoGridAdapter;
 import com.yahoo.shopping.epoch.constants.AppConstants;
-import com.yahoo.shopping.epoch.models.Comment;
+import com.yahoo.shopping.epoch.models.SpotPhoto;
 import com.yahoo.shopping.epoch.models.SpotPlace;
+import com.yahoo.shopping.epoch.utils.GoogleImageResult;
+import com.yahoo.shopping.epoch.utils.GoogleImageService;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.util.List;
 
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
 public class SpotShowFragment extends Fragment
         implements View.OnScrollChangeListener, View.OnClickListener /*, GoogleImageService.OnFetchedListener*/ {
     private final int MAX_RADIUS = 25;
+    private final int PHOTO_GRID_SPAN_COUNT = 2;
 
     private int mRadius = 0;
 
     private Context mContext;
     private SpotPlace mPlace;
     private ViewHolder mVH = new ViewHolder();
-//    private GoogleImageService mGIS = new GoogleImageService();
+    private GoogleImageService mGIS = new GoogleImageService();
+    private StaggeredGridLayoutManager mPhotoGridLayoutManager = new StaggeredGridLayoutManager(PHOTO_GRID_SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPlace = getArguments().getParcelable(AppConstants.ARGUMENTS_SPOT_PLACE);
-//        mGIS.fetchImages(mPlace.getTitle(), this);
     }
 
     @Nullable
@@ -80,10 +85,14 @@ public class SpotShowFragment extends Fragment
         mVH.ivMakeCall = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecall);
         mVH.rlToolbar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
         mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
+        mVH.rvPhotoGrid = (RecyclerView) view.findViewById(R.id.fragment_spot_show_rv_photos);
+        mVH.rvPhotoGrid.setLayoutManager(mPhotoGridLayoutManager);
 
         initToolbar();
         initScrollView();
         initBackgorund();
+
+        fetchPhotoGrid(mPlace.getTitle());
 
         return view;
     }
@@ -148,13 +157,17 @@ public class SpotShowFragment extends Fragment
         Picasso.with(mContext).load(mPlace.getImageUrl()).into(mVH.ivImage);
     }
 
-//    @Override
-//    public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
-//        if ((imageResults.size() > 0) && (mVH.ivImage.getDrawable() == null)) {
-//            mPlace.setImageUrl(imageResults.get(0).url);
-//            initBackgorund();
-//        }
-//    }
+    private void fetchPhotoGrid(String keyword) {
+        // fetch Photos
+        mGIS.fetchImages(keyword, new GoogleImageService.OnFetchedListener() {
+            @Override
+            public void onFetched(List<GoogleImageResult> imageResults, int nextPage) {
+                List<SpotPhoto> photos = SpotPhoto.fromGoogleImageResults(imageResults);
+                SpotShowPhotoGridAdapter adapter = new SpotShowPhotoGridAdapter(photos);
+                mVH.rvPhotoGrid.setAdapter(adapter);
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {
@@ -278,5 +291,6 @@ public class SpotShowFragment extends Fragment
         public ImageView ivMakeCall;
         public Bitmap bmBG;
         public ImageView ivMakeComment;
+        public RecyclerView rvPhotoGrid;
     }
 }

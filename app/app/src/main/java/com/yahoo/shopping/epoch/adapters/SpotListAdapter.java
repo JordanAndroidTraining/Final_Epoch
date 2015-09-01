@@ -18,7 +18,6 @@ import com.yahoo.shopping.epoch.models.SpotPlace;
 import com.yahoo.shopping.epoch.utils.GoogleImageResult;
 import com.yahoo.shopping.epoch.utils.GoogleImageService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
@@ -103,9 +102,8 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
         if (place.getImageUrl().isEmpty()) {
             new GoogleImageService().fetchImages(place.getTitle(), new GoogleImageService.OnFetchedListener() {
                 @Override
-                public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
+                public void onFetched(List<GoogleImageResult> imageResults, int nextPage) {
                     String url = imageResults.get(0).url;
-
                     if (!url.isEmpty()) {
                         // update app entity
                         place.setImageUrl(url);
@@ -124,6 +122,7 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
     }
 
     private void updateImage(ImageView imageView, String imageUrl) {
+        imageView.setImageResource(0);
         Picasso.with(mContext).load(imageUrl).into(imageView);
     }
 }

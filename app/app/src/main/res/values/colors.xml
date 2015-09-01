@@ -3,4 +3,6 @@
     <color name="available_blue">#0B42FF</color>
     <color name="unavailable_grey">#6D6D6D</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

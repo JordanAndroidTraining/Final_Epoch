@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:layout_margin="3dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/fragment_spot_show_rv_photos_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:background="#5CCC"
+        android:minHeight="150dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/fragment_spot_show_rv_photos_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fragment_spot_show_rv_photos_image"
+        android:ellipsize="end"
+        android:padding="3dp"
+        android:singleLine="true"
+        android:text="宜蘭縣冬山河親水公園"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+</RelativeLayout>
