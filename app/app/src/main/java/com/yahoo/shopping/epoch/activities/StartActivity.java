@@ -26,6 +26,7 @@ public class StartActivity extends ActionBarActivity {
             public void run() {
                 startActivity(i);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                finish();
             }
         }, 2500);
 
