@@ -17,43 +17,39 @@
         android:background="@drawable/gradient_inner"
         android:fillViewport="true" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/fragment_spot_show_rl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
         android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/fragment_spot_show_iv_makecomment"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_comment_white" />
 
         <ImageView
             android:id="@+id/fragment_spot_show_iv_makecall"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_alignParentTop="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/fragment_spot_show_iv_makecomment"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_action_makecall" />
-
 
         <ImageView
             android:id="@+id/fragment_spot_show_iv_viewmap"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_alignTop="@id/fragment_spot_show_iv_makecall"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/fragment_spot_show_iv_makecall"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_action_viewmap" />
 
+        <ImageView
+            android:id="@+id/fragment_spot_show_iv_makecomment"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_comment_white" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/fragment_spot_show_sv_container"
@@ -63,7 +59,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp">
 
             <LinearLayout
                 android:id="@+id/fragment_spot_show_ll_favstar"
@@ -128,7 +125,7 @@
 
             <TextView
                 android:id="@+id/fragment_spot_show_tv_address"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fragment_spot_show_tv_title"
                 android:layout_marginBottom="7dp"
@@ -147,7 +144,7 @@
             <TextView
                 android:id="@+id/fragment_spot_show_tv_feature"
                 style="@style/SpotShowContent"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fragment_spot_show_tv_feature_caption" />
 
@@ -162,7 +159,7 @@
             <TextView
                 android:id="@+id/fragment_spot_show_tv_reminder"
                 style="@style/SpotShowContent"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fragment_spot_show_tv_reminder_caption" />
 
@@ -177,9 +174,10 @@
             <TextView
                 android:id="@+id/fragment_spot_show_tv_trafficinfo"
                 style="@style/SpotShowContent"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fragment_spot_show_tv_trafficinfo_caption" />
+
         </RelativeLayout>
 
     </ScrollView>

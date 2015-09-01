@@ -18,7 +18,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,14 +64,18 @@ public class SpotShowFragment extends Fragment
         mVH.ivFavStar4 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar4);
         mVH.ivFavStar5 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar5);
         mVH.tvTitle = (TextView) view.findViewById(R.id.fragment_spot_show_tv_title);
+        mVH.tvAddressC = (TextView) view.findViewById(R.id.fragment_spot_show_tv_feature_caption);
         mVH.tvAddress = (TextView) view.findViewById(R.id.fragment_spot_show_tv_address);
+        mVH.tvFeatureC = (TextView) view.findViewById(R.id.fragment_spot_show_tv_feature_caption);
         mVH.tvFeature = (TextView) view.findViewById(R.id.fragment_spot_show_tv_feature);
+        mVH.tvReminderC = (TextView) view.findViewById(R.id.fragment_spot_show_tv_reminder_caption);
         mVH.tvReminder = (TextView) view.findViewById(R.id.fragment_spot_show_tv_reminder);
+        mVH.tvTrafficInfoC = (TextView) view.findViewById(R.id.fragment_spot_show_tv_trafficinfo_caption);
         mVH.tvTrafficInfo = (TextView) view.findViewById(R.id.fragment_spot_show_tv_trafficinfo);
         mVH.ivImage = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_image);
         mVH.ivViewMap = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_viewmap);
         mVH.ivMakeCall = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecall);
-        mVH.rlToolbar = (RelativeLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
+        mVH.rlToolbar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
         mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
 
         initToolbar();
@@ -105,9 +108,11 @@ public class SpotShowFragment extends Fragment
 
         mVH.ivMakeCall.setTag(mPlace.getPhoneNumber());
         mVH.ivMakeCall.setOnClickListener(this);
+        mVH.ivMakeCall.setVisibility(mPlace.getPhoneNumber().length() > 0 ? View.VISIBLE : View.GONE);
 
-        mVH.ivViewMap.setTag(mPlace.getAddress());
+        mVH.ivViewMap.setTag(mPlace.getTitle());
         mVH.ivViewMap.setOnClickListener(this);
+        mVH.ivViewMap.setVisibility(mPlace.getTitle().length() > 0 ? View.VISIBLE : View.GONE);
 
         mVH.ivMakeComment.setTag(mPlace.getResourceId());
         mVH.ivMakeComment.setOnClickListener(this);
@@ -122,6 +127,15 @@ public class SpotShowFragment extends Fragment
         mVH.tvFeature.setText(mPlace.getFeature());
         mVH.tvReminder.setText(mPlace.getReminder());
         mVH.tvTrafficInfo.setText(mPlace.getTrafficInfo());
+
+        mVH.tvAddress.setVisibility(mPlace.getAddress().length() > 0 ? View.VISIBLE : View.GONE);
+        mVH.tvAddressC.setVisibility(mPlace.getAddress().length() > 0 ? View.VISIBLE : View.GONE);
+        mVH.tvFeature.setVisibility(mPlace.getFeature().length() > 0 ? View.VISIBLE : View.GONE);
+        mVH.tvFeatureC.setVisibility(mPlace.getFeature().length() > 0 ? View.VISIBLE : View.GONE);
+        mVH.tvReminder.setVisibility(mPlace.getReminder().length() > 0 ? View.VISIBLE : View.GONE);
+        mVH.tvReminderC.setVisibility(mPlace.getReminder().length() > 0 ? View.VISIBLE : View.GONE);
+        mVH.tvTrafficInfo.setVisibility(mPlace.getTrafficInfo().length() > 0 ? View.VISIBLE : View.GONE);
+        mVH.tvTrafficInfoC.setVisibility(mPlace.getTrafficInfo().length() > 0 ? View.VISIBLE : View.GONE);
 
         mVH.svContainer.setOnScrollChangeListener(this);
     }
@@ -191,13 +205,17 @@ public class SpotShowFragment extends Fragment
         if (draw != null) {
             // prepare background source bmp
             if (mVH.bmBG == null) {
-                mVH.bmBG = ((BitmapDrawable)draw).getBitmap();
+                mVH.bmBG = ((BitmapDrawable) draw).getBitmap();
             }
             // calculate radius
             int radius = 1 + (MAX_RADIUS * scrollY / containerHeight);
             if (mRadius != radius) {
                 mRadius = radius;
-                mVH.ivImage.setImageBitmap(getBlurBitmap(mVH.bmBG, radius));
+                if (radius == 1) {
+                    mVH.ivImage.setImageBitmap(mVH.bmBG);
+                } else {
+                    mVH.ivImage.setImageBitmap(getBlurBitmap(mVH.bmBG, radius));
+                }
             }
         }
         // Alpha Toolbar
@@ -206,8 +224,12 @@ public class SpotShowFragment extends Fragment
     }
 
     private Bitmap getBlurBitmap(Bitmap bmp, int radius) {
-        if (radius < 1) { radius = 1; }
-        if (radius > 25) { radius = 25; }
+        if (radius < 1) {
+            radius = 1;
+        }
+        if (radius > 25) {
+            radius = 25;
+        }
         return new BlurTransformation(mContext, radius).transform(bmp.copy(bmp.getConfig(), true));
     }
 
@@ -220,12 +242,16 @@ public class SpotShowFragment extends Fragment
         public ImageView ivFavStar4;
         public ImageView ivFavStar5;
         public TextView tvTitle;
+        public TextView tvAddressC;
         public TextView tvAddress;
+        public TextView tvFeatureC;
         public TextView tvFeature;
+        public TextView tvReminderC;
         public TextView tvReminder;
+        public TextView tvTrafficInfoC;
         public TextView tvTrafficInfo;
         public ImageView ivImage;
-        public RelativeLayout rlToolbar;
+        public LinearLayout rlToolbar;
         public ImageView ivViewMap;
         public ImageView ivMakeCall;
         public Bitmap bmBG;
