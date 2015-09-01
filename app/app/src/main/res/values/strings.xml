@@ -10,4 +10,5 @@
     <string name="spot_tv_placeholder">Nice Place</string>
 
     <string name="title_activity_comment">CommentActivity</string>
+    <string name="title_activity_start">StartActivity</string>
 </resources>

@@ -7,7 +7,9 @@
         android:id="@+id/listview_spot_list_cv"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_margin="10dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,11 +23,17 @@
                 android:background="@color/ripple_material_light"
                 android:scaleType="centerCrop" />
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_inner"
+                android:fillViewport="true" />
+
             <TextView
                 android:id="@+id/listview_spot_list_tv_title"
                 style="@style/SpotListItemText"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:layout_alignBottom="@+id/listview_spot_list_iv_image"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -38,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@android:drawable/btn_star_big_off"
+                android:src="@drawable/ic_fav_heart0"
                 android:layout_alignParentTop="true" />
 
             <RelativeLayout
@@ -48,7 +56,7 @@
                 android:layout_above="@+id/listview_spot_list_tv_title"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="5dp">
+                android:layout_marginRight="7dp">
 
                 <ImageView
                     android:id="@+id/ivSpotListStar1"

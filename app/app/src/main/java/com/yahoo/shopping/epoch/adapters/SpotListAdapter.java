@@ -61,7 +61,7 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
         FavoriteSpots preferences = FavoriteSpots.getInstance(mContext);
 
         if (preferences.contains(String.valueOf(place.getResourceId()))) {
-            ivFavorite.setImageResource(android.R.drawable.btn_star_big_on);
+            ivFavorite.setImageResource(R.drawable.ic_fav_heart1);
         }
 
         ivFavorite.setOnClickListener(new View.OnClickListener() {
@@ -72,12 +72,12 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
                 String resourceId = String.valueOf(place.getResourceId());
                 if (preferences.contains(resourceId)) {
                     preferences.removeFavorite(resourceId);
-                    ivFavorite.setImageResource(android.R.drawable.btn_star_big_off);
+                    ivFavorite.setImageResource(R.drawable.ic_fav_heart0);
 
                     Toast.makeText(mContext, "已刪除: " + place.getTitle(), Toast.LENGTH_SHORT).show();
                 } else {
                     preferences.addFavorite(resourceId);
-                    ivFavorite.setImageResource(android.R.drawable.btn_star_big_on);
+                    ivFavorite.setImageResource(R.drawable.ic_fav_heart1);
 
                     Toast.makeText(mContext, "已增加: " + place.getTitle(), Toast.LENGTH_SHORT).show();
                 }

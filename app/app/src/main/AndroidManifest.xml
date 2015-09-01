@@ -12,20 +12,25 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activities.EpochActivity"
+            android:name=".activities.StartActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.EpochActivity"
+            android:label="@string/app_name" >
+
         </activity>
         <activity android:name=".activities.SpotShowActivity" />
         <activity
             android:name=".activities.CommentActivity"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
-            android:label="@string/title_activity_comment" >
+            android:label="@string/title_activity_comment"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize" >
         </activity>
+
     </application>
 
 </manifest>
