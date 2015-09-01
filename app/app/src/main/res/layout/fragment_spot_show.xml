@@ -25,31 +25,33 @@
 
         <ImageView
             android:id="@+id/fragment_spot_show_iv_makecomment"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/ic_comment_white"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/fragment_spot_show_iv_viewmap"/>
-
-        <ImageView
-            android:id="@+id/fragment_spot_show_iv_viewmap"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignTop="@+id/fragment_spot_show_iv_makecall"
-            android:layout_marginRight="15dp"
-            android:layout_toLeftOf="@+id/fragment_spot_show_iv_makecall"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_action_viewmap" />
+            android:src="@drawable/ic_comment_white" />
 
         <ImageView
             android:id="@+id/fragment_spot_show_iv_makecall"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentRight="true"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_alignParentTop="true"
             android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/fragment_spot_show_iv_makecomment"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_action_makecall" />
+
+
+        <ImageView
+            android:id="@+id/fragment_spot_show_iv_viewmap"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignTop="@id/fragment_spot_show_iv_makecall"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/fragment_spot_show_iv_makecall"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_viewmap" />
+
 
     </RelativeLayout>
 

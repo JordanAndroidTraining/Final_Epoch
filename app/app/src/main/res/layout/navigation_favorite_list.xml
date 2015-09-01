@@ -16,5 +16,4 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/white" />
 
-
 </LinearLayout>

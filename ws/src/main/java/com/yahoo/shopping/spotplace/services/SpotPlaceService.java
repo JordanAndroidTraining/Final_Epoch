@@ -6,6 +6,7 @@ import com.yahoo.shopping.spotplace.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,12 +25,13 @@ import java.util.logging.Logger;
 @Service
 public class SpotPlaceService {
     private Logger logger = Logger.getLogger(SpotPlaceService.class.getName());
+    private static final int PAGE_SIZE = 10;
 
     @Autowired
     private SpotPlaceRepository repository;
 
     public Page<SpotPlace> getResourcesByType(SpotPlaceType type, int pageIndex) {
-        return repository.findByType(type, new PageRequest(pageIndex, 20));
+        return repository.findByType(type, new PageRequest(pageIndex, PAGE_SIZE, new Sort(Sort.Direction.ASC, "id")));
     }
 
     public SpotPlace getResourceById(long id) {
@@ -37,11 +39,11 @@ public class SpotPlaceService {
     }
 
     public Page<SpotPlace> searchResourcesByKeyword(String keyword, int pageIndex) {
-        return repository.findByKeyword("%" + keyword + "%", new PageRequest(pageIndex, 20));
+        return repository.findByKeyword("%" + keyword + "%", new PageRequest(pageIndex, PAGE_SIZE, new Sort(Sort.Direction.ASC, "id")));
     }
 
     public Page<SpotPlace> searchResourcesByKeywordAndType(String keyword, SpotPlaceType type, int pageIndex) {
-        return repository.findByKeywordAndType("%" + keyword + "%", type, new PageRequest(pageIndex, 20));
+        return repository.findByKeywordAndType("%" + keyword + "%", type, new PageRequest(pageIndex, PAGE_SIZE, new Sort(Sort.Direction.ASC, "id")));
     }
 
     public void updateImageUrlById(long id, String imageUrl) {

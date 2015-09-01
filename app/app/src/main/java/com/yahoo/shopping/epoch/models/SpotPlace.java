@@ -2,7 +2,6 @@ package com.yahoo.shopping.epoch.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -139,7 +138,7 @@ public class SpotPlace implements Parcelable{
         String reminder = data.optString("reminder","");
         String trafficInfo = data.optString("trafficInfo","");
         String phoneNumber = data.optString("phoneNumber","");
-        int rating = data.optInt("rating", 0);
+        int rating = data.optInt("averageRating", 0);
         int resourceId = data.optInt("id",0);
 
         SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber,rating,resourceId);

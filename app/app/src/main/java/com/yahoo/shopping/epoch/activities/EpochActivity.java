@@ -1,5 +1,6 @@
 package com.yahoo.shopping.epoch.activities;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -19,16 +20,23 @@ import com.yahoo.shopping.epoch.EpochClient;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.fragments.SpotListFragment;
+import com.yahoo.shopping.epoch.models.FavoriteSpots;
 import com.yahoo.shopping.epoch.models.SpotPlace;
 
+import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-
-import org.apache.http.Header;
-
-public class EpochActivity extends AppCompatActivity{
+public class EpochActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private NavigationView mSideBarNaviNv;
     private DrawerLayout mDrawer;
@@ -58,7 +66,7 @@ public class EpochActivity extends AppCompatActivity{
         // set default trip type as countryside
         mTripType = AppConstants.TRIP_TYPE_COUNTRY_SIDE;
 
-        mToolbar = (Toolbar)findViewById(R.id.activity_epoch_tb_toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.activity_epoch_tb_toolbar);
         setSupportActionBar(mToolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -71,7 +79,7 @@ public class EpochActivity extends AppCompatActivity{
         getSpotPlacesAndRender(AppConstants.RENDER_TYPE_CLUSTER);
     }
 
-    private void replaceContentFragment() {
+    private synchronized void replaceContentFragment() {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(AppConstants.ARGUMENTS_SPOT_PLACES, mSpotPlaces);
 
@@ -83,15 +91,25 @@ public class EpochActivity extends AppCompatActivity{
         transaction.commit();
     }
 
-    private void getSpotPlacesAndRender(int renderType){
-        switch (renderType){
+    private void performGetFavoriteSpots() {
+        Set<String> favorites = FavoriteSpots.getInstance(this).getFavorites();
+        new FetchMultipleResourcesAsyncTask().execute(favorites);
+    }
+
+    private void getSpotPlacesAndRender(int renderType) {
+        switch (renderType) {
             case AppConstants.RENDER_TYPE_CLUSTER:
-                mClient.getSpotListByType(mTripType, new EpochHttpResponseHandler());
+                mClient.getSpotListByType(mTripType, new MultiSpotPlacesHttpResponseHandler());
                 break;
             case AppConstants.RENDER_TYPE_SEARCH:
-                mClient.getSpotListByKeyword(mSearchKeyword, new EpochHttpResponseHandler());
+                mClient.getSpotListByKeyword(mSearchKeyword, new MultiSpotPlacesHttpResponseHandler());
                 break;
         }
+    }
+
+    public void searchSubmitHandler(String keyword) {
+        mSearchKeyword = keyword;
+        getSpotPlacesAndRender(AppConstants.RENDER_TYPE_SEARCH);
     }
 
     @Override
@@ -131,44 +149,43 @@ public class EpochActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void navigationItemSelectHandler(MenuItem menuItem){
+    public void navigationItemSelectHandler(MenuItem menuItem) {
         // get selected type
         String clickedTitle = (String) menuItem.getTitle();
         String prevTripType = mTripType;
 
-        if(clickedTitle.equals(getString(R.string.country_side))){
+        if (clickedTitle.equals(getString(R.string.country_side))) {
             mTripType = AppConstants.TRIP_TYPE_COUNTRY_SIDE;
-        }
-        else if(clickedTitle.equals(getString(R.string.farm_visit))){
+        } else if (clickedTitle.equals(getString(R.string.farm_visit))) {
             mTripType = AppConstants.TRIP_TYPE_FARM_VISIT;
-        }
-        else if(clickedTitle.equals(getString(R.string.spot))){
+        } else if (clickedTitle.equals(getString(R.string.spot))) {
             mTripType = AppConstants.TRIP_TYPE_SPOT;
-        }
-        else if(clickedTitle.equals(getString(R.string.aborigines))){
+        } else if (clickedTitle.equals(getString(R.string.aborigines))) {
             mTripType = AppConstants.TRIP_TYPE_ABORIGINES;
         }
-        // virtual type => use search
         else {
-            searchSubmitHandler(clickedTitle);
+            if (clickedTitle.equals("最愛地點")) {
+                mTripType = "";
+                performGetFavoriteSpots();
+                mDrawer.closeDrawer(mSideBarNaviNv);
+                return;
+            } else { // virtual type => use search
+                mTripType = "";
+                searchSubmitHandler(clickedTitle);
+                mDrawer.closeDrawer(mSideBarNaviNv);
+                return;
+            }
         }
-//        Log.d("JordanTest","clickedTitle: " + clickedTitle);
 
         //if select different type => re-render list
-        if(!prevTripType.equals(mTripType)){
+        if (!prevTripType.equals(mTripType)) {
             getSpotPlacesAndRender(AppConstants.RENDER_TYPE_CLUSTER);
         }
 
-        // hide side bar
         mDrawer.closeDrawer(mSideBarNaviNv);
     }
 
-    public void searchSubmitHandler(String keyword){
-        mSearchKeyword = keyword;
-        getSpotPlacesAndRender(AppConstants.RENDER_TYPE_SEARCH);
-    }
-
-    private class EpochHttpResponseHandler extends JsonHttpResponseHandler {
+    private class MultiSpotPlacesHttpResponseHandler extends JsonHttpResponseHandler {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             mSpotPlaces = SpotPlace.parseFromJSONArray(response.optJSONArray("content"));
@@ -178,6 +195,56 @@ public class EpochActivity extends AppCompatActivity{
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             Log.d("getSpotListByType Error", responseString);
+        }
+    }
+
+    private class FetchMultipleResourcesAsyncTask extends AsyncTask<Set<String>, Void, List<SpotPlace>> {
+        private String fetchContent(String url) throws IOException {
+            StringBuilder jsonString = new StringBuilder();
+
+            URLConnection urlConnection = new URL(url).openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+            String line;
+            do {
+                line = reader.readLine();
+
+                if (line != null) {
+                    jsonString.append(line);
+                }
+            } while (line != null);
+
+            return jsonString.toString();
+        }
+
+        @Override
+        protected List<SpotPlace> doInBackground(Set<String>... params) {
+            Set<String> favorites = params[0];
+            List<SpotPlace> places = new ArrayList<>();
+
+            for (String resourceId : favorites) {
+                String apiUrl = AppConstants.REST_BASE_URL + "resources/" + resourceId;
+
+                try {
+                    String content = fetchContent(apiUrl);
+                    places.add(SpotPlace.parseFromJSONObject(new JSONObject(content)));
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return places;
+        }
+
+        @Override
+        protected void onPostExecute(List<SpotPlace> spotPlaces) {
+            mSpotPlaces.clear();
+
+            if (spotPlaces != null) {
+                mSpotPlaces.addAll(spotPlaces);
+            }
+
+            replaceContentFragment();
         }
     }
 }

@@ -3,39 +3,48 @@ package com.yahoo.shopping.epoch;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.yahoo.shopping.epoch.constants.AppConstants;
 
 /**
  * Created by jordanhsu on 8/30/15.
  */
 public class EpochClient {
-    public final String REST_BASE_URL = "http://10.0.3.2:8080/";
     private AsyncHttpClient client = new AsyncHttpClient();
 
-    public static EpochClient getInstance(){
+    public static EpochClient getInstance() {
         return new EpochClient();
     }
 
-    public void getSpotListByKeyword(String keyword,AsyncHttpResponseHandler responseHandler){
-        String apiUrl = REST_BASE_URL + "resources/search";
+    public void getSpotListByKeyword(String keyword, AsyncHttpResponseHandler responseHandler) {
+        String apiUrl = AppConstants.REST_BASE_URL + "resources/search";
         RequestParams params = new RequestParams();
         params.put("keyword", keyword);
         client.get(apiUrl, params, responseHandler);
     }
 
-    public void getSpotListByType(String type,AsyncHttpResponseHandler responseHandler){
-        String apiUrl = REST_BASE_URL + "resources";
+    public void getSpotListByType(String type, AsyncHttpResponseHandler responseHandler) {
+        String apiUrl = AppConstants.REST_BASE_URL + "resources";
         RequestParams params = new RequestParams();
         params.put("type", type);
         client.get(apiUrl, params, responseHandler);
     }
 
-    public void postCommentByResourceId(int resourceId,String subject, String comment,String imageUrl, int rating , AsyncHttpResponseHandler responseHandler){
-        String apiUrl = REST_BASE_URL + "resources/" + String.valueOf(resourceId) + "/comments";
+    public void postCommentByResourceId(int resourceId, String subject, String comment, String imageUrl, int rating, AsyncHttpResponseHandler responseHandler) {
+        String apiUrl = AppConstants.REST_BASE_URL + "resources/" + String.valueOf(resourceId) + "/comments";
         RequestParams params = new RequestParams();
-        params.put("subject",subject);
-        params.put("comment",comment);
-        params.put("imageUrl",imageUrl);
-        params.put("rating",rating);
+        params.put("subject", subject);
+        params.put("comment", comment);
+        params.put("imageUrl", imageUrl);
+        params.put("rating", rating);
+        client.post(apiUrl, params, responseHandler);
+    }
+
+    public void updateImageByResourceId(int resourceId, String imageUrl, AsyncHttpResponseHandler responseHandler) {
+        String apiUrl = AppConstants.REST_BASE_URL + "resources/" + String.valueOf(resourceId) + "/imageUrl";
+
+        RequestParams params = new RequestParams();
+        params.put("imageUrl", imageUrl);
+
         client.post(apiUrl, params, responseHandler);
     }
 }

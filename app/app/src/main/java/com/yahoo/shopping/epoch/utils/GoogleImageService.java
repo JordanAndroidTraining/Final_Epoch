@@ -88,12 +88,15 @@ public class GoogleImageService {
                 super.onSuccess(statusCode, headers, response);
                 try {
                     // load images from JSONArray
-                    JSONArray results = response.getJSONArray("results");
+                    JSONObject rootObj = response.getJSONObject("responseData"); // TODO: strange format change
+                    JSONArray results = rootObj.getJSONArray("results");
                     mImages.addAll(GoogleImageResult.fromJSONArray(results));
+
                     // get pagination data
-                    JSONObject cursor = response.getJSONObject("cursor");
+                    JSONObject cursor = rootObj.getJSONObject("cursor");
                     JSONObject nextPage = cursor.getJSONArray("pages").optJSONObject(cursor.getInt("currentPageIndex") + 1);
                     mNextPageStartIndex = (nextPage == null) ? -1 : nextPage.getInt("start");
+
                     // notify listener
                     if (listener != null) {
                         listener.onFetched(mImages, mNextPageStartIndex);

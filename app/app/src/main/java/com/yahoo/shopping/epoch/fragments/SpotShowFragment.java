@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,33 +28,31 @@ import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.activities.CommentActivity;
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.models.SpotPlace;
-import com.yahoo.shopping.epoch.utils.GoogleImageResult;
-import com.yahoo.shopping.epoch.utils.GoogleImageService;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
 /**
  * Created by jamesyan on 8/28/15.
  */
-public class SpotShowFragment extends Fragment implements View.OnScrollChangeListener, View.OnClickListener, GoogleImageService.OnFetchedListener {
-
+public class SpotShowFragment extends Fragment
+        implements View.OnScrollChangeListener, View.OnClickListener /*, GoogleImageService.OnFetchedListener*/ {
     private final int MAX_RADIUS = 25;
+
     private int mRadius = 0;
 
     private Context mContext;
     private SpotPlace mPlace;
     private ViewHolder mVH = new ViewHolder();
-    private GoogleImageService mGIS = new GoogleImageService();
+//    private GoogleImageService mGIS = new GoogleImageService();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPlace = getArguments().getParcelable(AppConstants.ARGUMENTS_SPOT_PLACE);
-        mGIS.fetchImages(mPlace.getTitle(), this);
+//        mGIS.fetchImages(mPlace.getTitle(), this);
     }
 
     @Nullable
@@ -93,7 +90,7 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        params.topMargin = (int) (metrics.heightPixels - (35 + 28 + 7 + 15) * metrics.density);
+        params.topMargin = (int) (metrics.heightPixels - (35 + 22 + 7 + 15 + 5) * metrics.density);
 
         view.requestLayout();
     }
@@ -137,13 +134,13 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         Picasso.with(mContext).load(mPlace.getImageUrl()).into(mVH.ivImage);
     }
 
-    @Override
-    public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
-        if ((imageResults.size() > 0) && (mVH.ivImage.getDrawable() == null)) {
-            mPlace.setImageUrl(imageResults.get(0).url);
-            initBackgorund();
-        }
-    }
+//    @Override
+//    public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
+//        if ((imageResults.size() > 0) && (mVH.ivImage.getDrawable() == null)) {
+//            mPlace.setImageUrl(imageResults.get(0).url);
+//            initBackgorund();
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
