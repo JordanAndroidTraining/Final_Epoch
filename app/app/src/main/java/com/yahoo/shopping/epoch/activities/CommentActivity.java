@@ -1,5 +1,6 @@
 package com.yahoo.shopping.epoch.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,9 +16,11 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.shopping.epoch.EpochClient;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.constants.AppConstants;
+import com.yahoo.shopping.epoch.models.SpotPlace;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class CommentActivity extends AppCompatActivity implements View.OnClickListener,View.OnKeyListener {
     private int mResourceId;
@@ -95,18 +98,35 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("JordanTest","make comment success!!");
-                finish();
-                //super.onSuccess(statusCode, headers, response);
+                refetchSpotDataAndGoBack();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("JordanTest","make comment fail| msg: " + responseString);
-                finish();
+                Log.d("JordanTest", "make comment fail| msg: " + responseString);
+                refetchSpotDataAndGoBack();
             }
         });
     }
 
+    public void refetchSpotDataAndGoBack(){
+        mClient.getSpotByResourceId(mResourceId, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                SpotPlace spot = SpotPlace.parseFromJSONObject(response);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(AppConstants.COMMENT_RESULT_EXTRA_KEY, spot);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {

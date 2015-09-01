@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,11 @@ import com.squareup.picasso.Picasso;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.activities.CommentActivity;
 import com.yahoo.shopping.epoch.constants.AppConstants;
+import com.yahoo.shopping.epoch.models.Comment;
 import com.yahoo.shopping.epoch.models.SpotPlace;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
@@ -172,7 +175,26 @@ public class SpotShowFragment extends Fragment
             case R.id.fragment_spot_show_iv_makecomment:
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 intent.putExtra(AppConstants.INTENT_COMMENT_RESOURCE_ID, (int) v.getTag());
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent,AppConstants.INTENT_COMMENT_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == getActivity().RESULT_OK){
+            if(requestCode == AppConstants.INTENT_COMMENT_REQUEST_CODE){
+
+                // get SpotPlace data from CommentActivity
+                SpotPlace updatedSpot = data.getParcelableExtra(AppConstants.COMMENT_RESULT_EXTRA_KEY);
+
+
+                // do something if comment activity is finish!
+
+            }
+        }
+        if(resultCode == getActivity().RESULT_CANCELED){
+            // do error handle (no extra data pass back)
         }
     }
 

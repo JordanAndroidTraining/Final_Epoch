@@ -19,7 +19,11 @@ public class SpotPlace implements Parcelable{
     private String trafficInfo;
     private String phoneNumber;
 
-    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo, String phoneNumber, int rating,int resourceId) {
+
+
+    private ArrayList<Comment> commentList;
+
+    public SpotPlace(String title, String address, String imageUrl, String feature, String reminder, String trafficInfo, String phoneNumber, int rating,int resourceId, ArrayList<Comment> commentList) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.address = address;
@@ -29,6 +33,7 @@ public class SpotPlace implements Parcelable{
         this.phoneNumber = phoneNumber;
         this.rating = rating;
         this.resourceId = resourceId;
+        this.commentList = commentList;
     }
 
     protected SpotPlace(Parcel in) {
@@ -41,6 +46,7 @@ public class SpotPlace implements Parcelable{
         reminder = in.readString();
         trafficInfo = in.readString();
         phoneNumber = in.readString();
+        commentList = (ArrayList<Comment>) in.readSerializable();
     }
 
     public int getResourceId() {
@@ -115,6 +121,14 @@ public class SpotPlace implements Parcelable{
         this.phoneNumber = phoneNumber;
     }
 
+    public ArrayList<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(ArrayList<Comment> commentList) {
+        this.commentList = commentList;
+    }
+
     public static final Creator<SpotPlace> CREATOR = new Creator<SpotPlace>() {
         @Override
         public SpotPlace createFromParcel(Parcel in) {
@@ -137,8 +151,9 @@ public class SpotPlace implements Parcelable{
         String phoneNumber = data.optString("phoneNumber","");
         int rating = data.optInt("averageRating", 0);
         int resourceId = data.optInt("id",0);
+        ArrayList<Comment> comments = Comment.parseFromJSONArray(data.optJSONArray("comments"));
 
-        SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber,rating,resourceId);
+        SpotPlace spot = new SpotPlace(title,address,imageUrl,feature,reminder,trafficInfo,phoneNumber,rating,resourceId,comments);
         return spot;
     }
 
@@ -168,6 +183,7 @@ public class SpotPlace implements Parcelable{
         dest.writeString(reminder);
         dest.writeString(trafficInfo);
         dest.writeString(phoneNumber);
+        dest.writeSerializable(commentList);
     }
 
 }

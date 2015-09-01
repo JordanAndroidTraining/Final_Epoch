@@ -39,6 +39,11 @@ public class EpochClient {
         client.post(apiUrl, params, responseHandler);
     }
 
+    public void getSpotByResourceId(int resourceId, AsyncHttpResponseHandler responseHandler){
+        String apiUrl = AppConstants.REST_BASE_URL + "resources/" + String.valueOf(resourceId);
+        client.get(apiUrl,responseHandler);
+    }
+
     public void updateImageByResourceId(int resourceId, String imageUrl, AsyncHttpResponseHandler responseHandler) {
         String apiUrl = AppConstants.REST_BASE_URL + "resources/" + String.valueOf(resourceId) + "/imageUrl";
 

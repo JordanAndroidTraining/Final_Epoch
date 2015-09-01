@@ -7,6 +7,9 @@ public class AppConstants {
     public static final String INTENT_SPOT_PLACES = "INTENT_SPOT_PLACES";
     public static final String INTENT_SPOT_SELECT_PLACES_INDEX = "INTENT_SPOT_SELECT_PLACES_INDEX";
     public static final String INTENT_COMMENT_RESOURCE_ID = "INTENT_COMMENT_RESOURCE_ID";
+    public static final int INTENT_COMMENT_REQUEST_CODE = 10;
+
+    public static final String COMMENT_RESULT_EXTRA_KEY = "COMMENT_RESULT_EXTRA_KEY";
 
     public static final String PREFERENCE_STORAGE_NAME = "Epoch";
     public static final String PREFERENCE_FAVORITE_KEY = "Favorite";
@@ -20,4 +23,5 @@ public class AppConstants {
     public static final int RENDER_TYPE_CLUSTER = 1;
 
     public static final String REST_BASE_URL = "http://10.0.3.2:8080/";
+
 }
