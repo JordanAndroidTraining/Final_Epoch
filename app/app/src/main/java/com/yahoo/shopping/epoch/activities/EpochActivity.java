@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Set;
 
 public class EpochActivity extends AppCompatActivity {
-    private Toolbar mToolbar;
     private NavigationView mSideBarNaviNv;
     private DrawerLayout mDrawer;
     private EpochClient mClient;
@@ -66,7 +65,7 @@ public class EpochActivity extends AppCompatActivity {
         // set default trip type as countryside
         mTripType = AppConstants.TRIP_TYPE_COUNTRY_SIDE;
 
-        mToolbar = (Toolbar) findViewById(R.id.activity_epoch_tb_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_epoch_tb_toolbar);
         setSupportActionBar(mToolbar);
 
         ActionBar actionBar = getSupportActionBar();

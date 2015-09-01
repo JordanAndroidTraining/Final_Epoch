@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.View;
 
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.fragments.SpotShowFragment;
@@ -12,9 +11,6 @@ import com.yahoo.shopping.epoch.models.SpotPlace;
 
 import java.util.List;
 
-/**
- * Created by jamesyan on 8/28/15.
- */
 public class SpotShowViewPagerAdapter extends FragmentPagerAdapter {
     List<SpotPlace> mSpotPlaces;
 

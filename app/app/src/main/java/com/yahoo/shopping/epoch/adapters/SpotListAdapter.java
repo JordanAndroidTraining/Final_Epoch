@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,16 +18,9 @@ import com.yahoo.shopping.epoch.models.SpotPlace;
 import com.yahoo.shopping.epoch.utils.GoogleImageResult;
 import com.yahoo.shopping.epoch.utils.GoogleImageService;
 
-import org.apache.http.Header;
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-/**
- * Created by jamesyan on 8/28/15.
- */
 public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
 
     private Context mContext;
@@ -48,67 +40,52 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
             convertView = inflater.inflate(R.layout.listview_spot, null);
         }
 
+        // retrive the model
         final SpotPlace place = mSpotPlaces.get(position);
 
+        // fetch the components
         TextView tvTitle = (TextView) convertView.findViewById(R.id.listview_spot_list_tv_title);
-        Button btnFavorite = (Button) convertView.findViewById(R.id.listview_spot_list_btn_favorite);
+        final ImageView ivFavorite = (ImageView) convertView.findViewById(R.id.listview_spot_list_iv_favorite);
         final ImageView ivImage = (ImageView) convertView.findViewById(R.id.listview_spot_list_iv_image);
 
+        // set components content
         tvTitle.setText(place.getTitle());
-        processAndRenderRateStar(place.getRating(), convertView);
-        btnFavorite.setOnClickListener(new View.OnClickListener() {
+        setFavoriteContent(ivFavorite, place);
+        setRateStarStatus(place.getRating(), convertView);
+        setImageContent(ivImage, place);
+
+        return convertView;
+    }
+
+    private void setFavoriteContent(final ImageView ivFavorite, final SpotPlace place) {
+        FavoriteSpots preferences = FavoriteSpots.getInstance(mContext);
+
+        if (preferences.contains(String.valueOf(place.getResourceId()))) {
+            ivFavorite.setImageResource(android.R.drawable.btn_star_big_on);
+        }
+
+        ivFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FavoriteSpots preferences = FavoriteSpots.getInstance(mContext);
-                Set<String> favorites = preferences.getFavorites();
 
                 String resourceId = String.valueOf(place.getResourceId());
-                if (favorites.contains(resourceId)) {
+                if (preferences.contains(resourceId)) {
                     preferences.removeFavorite(resourceId);
+                    ivFavorite.setImageResource(android.R.drawable.btn_star_big_off);
 
                     Toast.makeText(mContext, "已刪除: " + place.getTitle(), Toast.LENGTH_SHORT).show();
                 } else {
                     preferences.addFavorite(resourceId);
+                    ivFavorite.setImageResource(android.R.drawable.btn_star_big_on);
 
                     Toast.makeText(mContext, "已增加: " + place.getTitle(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        if (place.getImageUrl().isEmpty()) {
-            new GoogleImageService().fetchImages(place.getTitle(), new GoogleImageService.OnFetchedListener() {
-                @Override
-                public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
-                    String url = imageResults.get(0).url;
-
-                    if (!url.isEmpty()) {
-                        // update app entity
-                        place.setImageUrl(url);
-
-                        // update storage entity
-                        new EpochClient().updateImageByResourceId(place.getResourceId(), url, new JsonHttpResponseHandler() { // TODO: Change to a empty responder
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            }
-                        });
-
-                        // update app image
-                        updateImage(ivImage, url);
-                    }
-                }
-            });
-        } else {
-            updateImage(ivImage, place.getImageUrl());
-        }
-
-        return convertView;
     }
 
-    private void processAndRenderRateStar(int rating, View view) {
+    private void setRateStarStatus(int rating, View view) {
         ImageView ivSpotListStar1 = (ImageView) view.findViewById(R.id.ivSpotListStar1);
         ImageView ivSpotListStar2 = (ImageView) view.findViewById(R.id.ivSpotListStar2);
         ImageView ivSpotListStar3 = (ImageView) view.findViewById(R.id.ivSpotListStar3);
@@ -120,6 +97,30 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
         ivSpotListStar3.setImageResource(rating >= 3 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
         ivSpotListStar4.setImageResource(rating >= 4 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
         ivSpotListStar5.setImageResource(rating >= 5 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+    }
+
+    private void setImageContent(final ImageView ivImage, final SpotPlace place) {
+        if (place.getImageUrl().isEmpty()) {
+            new GoogleImageService().fetchImages(place.getTitle(), new GoogleImageService.OnFetchedListener() {
+                @Override
+                public void onFetched(ArrayList<GoogleImageResult> imageResults, int nextPage) {
+                    String url = imageResults.get(0).url;
+
+                    if (!url.isEmpty()) {
+                        // update app entity
+                        place.setImageUrl(url);
+
+                        // update storage entity
+                        new EpochClient().updateImageByResourceId(place.getResourceId(), url, new JsonHttpResponseHandler());
+
+                        // update app image
+                        updateImage(ivImage, url);
+                    }
+                }
+            });
+        } else {
+            updateImage(ivImage, place.getImageUrl());
+        }
     }
 
     private void updateImage(ImageView imageView, String imageUrl) {

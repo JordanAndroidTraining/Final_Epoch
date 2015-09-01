@@ -1,14 +1,12 @@
 package com.yahoo.shopping.epoch.activities;
 
-import android.graphics.Color;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,9 +18,8 @@ import com.yahoo.shopping.epoch.constants.AppConstants;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.w3c.dom.Text;
 
-public class CommentActivity extends ActionBarActivity implements View.OnClickListener,View.OnKeyListener {
+public class CommentActivity extends AppCompatActivity implements View.OnClickListener,View.OnKeyListener {
     private int mResourceId;
     private ImageView mCloseCommentIv;
     private TextView mSubmitCommentTv;

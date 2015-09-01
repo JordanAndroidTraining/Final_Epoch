@@ -18,9 +18,6 @@ import com.yahoo.shopping.epoch.models.SpotPlace;
 
 import java.util.ArrayList;
 
-/**
- * Created by jamesyan on 8/28/15.
- */
 public class SpotListFragment extends Fragment {
 
     private ArrayList<SpotPlace> mSpotPlaces;

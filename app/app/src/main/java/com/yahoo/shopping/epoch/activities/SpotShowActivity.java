@@ -3,7 +3,6 @@ package com.yahoo.shopping.epoch.activities;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.adapters.SpotShowViewPagerAdapter;
@@ -12,9 +11,6 @@ import com.yahoo.shopping.epoch.models.SpotPlace;
 
 import java.util.ArrayList;
 
-/**
- * Created by jamesyan on 8/28/15.
- */
 public class SpotShowActivity extends AppCompatActivity {
 
     private ArrayList<SpotPlace> mSpotPlaces;

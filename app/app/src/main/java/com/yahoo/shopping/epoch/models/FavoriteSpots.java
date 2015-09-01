@@ -8,14 +8,10 @@ import com.yahoo.shopping.epoch.constants.AppConstants;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * Created by jamesyan on 9/1/15.
- */
 public class FavoriteSpots {
     private static FavoriteSpots sInstance;
 
     private Context mContext;
-    private Set<String> mFavorites;
 
     public static FavoriteSpots getInstance(Context context) {
         if (sInstance == null) {
@@ -29,14 +25,21 @@ public class FavoriteSpots {
         mContext = context;
     }
 
+    public boolean contains(String resourceId) {
+        Set<String> favorites = getFavorites();
+        return favorites.contains(resourceId);
+    }
+
     public void addFavorite(String id) {
-        mFavorites.add(id);
-        save();
+        Set<String> favorites = getFavorites();
+        favorites.add(id);
+        save(favorites);
     }
 
     public void removeFavorite(String id) {
-        mFavorites.remove(id);
-        save();
+        Set<String> favorites = getFavorites();
+        favorites.remove(id);
+        save(favorites);
     }
 
     public Set<String> getFavorites() {
@@ -44,10 +47,10 @@ public class FavoriteSpots {
         return preferences.getStringSet(AppConstants.PREFERENCE_FAVORITE_KEY, new LinkedHashSet<String>());
     }
 
-    private void save() {
+    private void save(Set<String> favorites) {
         SharedPreferences preferences = mContext.getSharedPreferences(AppConstants.PREFERENCE_STORAGE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(AppConstants.PREFERENCE_FAVORITE_KEY, mFavorites);
+        editor.putStringSet(AppConstants.PREFERENCE_FAVORITE_KEY, favorites);
 
         editor.commit();
     }

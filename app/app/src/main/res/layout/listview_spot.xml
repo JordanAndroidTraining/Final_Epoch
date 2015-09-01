@@ -33,13 +33,13 @@
                 android:paddingBottom="10dp"
                 android:text="@string/spot_tv_placeholder" />
 
-            <Button
-                android:id="@+id/listview_spot_list_btn_favorite"
+            <ImageView
+                android:id="@+id/listview_spot_list_iv_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:text="Favorite" />
+                android:src="@android:drawable/btn_star_big_off"
+                android:layout_alignParentTop="true" />
 
             <RelativeLayout
                 android:id="@+id/relativeLayout"

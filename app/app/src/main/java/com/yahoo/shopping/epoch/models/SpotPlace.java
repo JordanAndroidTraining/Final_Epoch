@@ -8,9 +8,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by jamesyan on 8/28/15.
- */
 public class SpotPlace implements Parcelable{
     private int rating;
     private int resourceId;

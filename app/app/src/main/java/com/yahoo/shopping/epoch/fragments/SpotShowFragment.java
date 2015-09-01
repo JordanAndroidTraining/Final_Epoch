@@ -33,9 +33,6 @@ import java.net.URLEncoder;
 
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
-/**
- * Created by jamesyan on 8/28/15.
- */
 public class SpotShowFragment extends Fragment
         implements View.OnScrollChangeListener, View.OnClickListener /*, GoogleImageService.OnFetchedListener*/ {
     private final int MAX_RADIUS = 25;
