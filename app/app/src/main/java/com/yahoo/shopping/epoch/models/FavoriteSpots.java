@@ -44,7 +44,12 @@ public class FavoriteSpots {
 
     public Set<String> getFavorites() {
         SharedPreferences preferences = mContext.getSharedPreferences(AppConstants.PREFERENCE_STORAGE_NAME, Context.MODE_PRIVATE);
-        return preferences.getStringSet(AppConstants.PREFERENCE_FAVORITE_KEY, new LinkedHashSet<String>());
+        Set<String> prefFavorite = preferences.getStringSet(AppConstants.PREFERENCE_FAVORITE_KEY, new LinkedHashSet<String>());
+
+        Set<String> favorites = new LinkedHashSet<>();
+        favorites.addAll(prefFavorite);
+
+        return favorites;
     }
 
     private void save(Set<String> favorites) {
