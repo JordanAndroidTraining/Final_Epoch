@@ -50,7 +50,6 @@ public class SpotShowFragment extends Fragment
     private SpotPlace mPlace;
     private ViewHolder mVH = new ViewHolder();
     private GoogleImageService mGIS = new GoogleImageService();
-    private StaggeredGridLayoutManager mPhotoGridLayoutManager = new StaggeredGridLayoutManager(PHOTO_GRID_SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class SpotShowFragment extends Fragment
         mVH.rlToolbar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
         mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
         mVH.rvPhotoGrid = (RecyclerView) view.findViewById(R.id.fragment_spot_show_rv_photos);
-        mVH.rvPhotoGrid.setLayoutManager(mPhotoGridLayoutManager);
+        mVH.rvPhotoGrid.setLayoutManager(new StaggeredGridLayoutManager(PHOTO_GRID_SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL));
 
         initToolbar();
         initScrollView();
@@ -189,24 +188,21 @@ public class SpotShowFragment extends Fragment
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 intent.putExtra(AppConstants.INTENT_COMMENT_RESOURCE_ID, (int) v.getTag());
                 //startActivity(intent);
-                startActivityForResult(intent,AppConstants.INTENT_COMMENT_REQUEST_CODE);
+                startActivityForResult(intent, AppConstants.INTENT_COMMENT_REQUEST_CODE);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == getActivity().RESULT_OK){
-            if(requestCode == AppConstants.INTENT_COMMENT_REQUEST_CODE){
-
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == AppConstants.INTENT_COMMENT_REQUEST_CODE) {
                 // get SpotPlace data from CommentActivity
-                SpotPlace updatedSpot = data.getParcelableExtra(AppConstants.COMMENT_RESULT_EXTRA_KEY);
-
-
-                // do something if comment activity is finish!
-
+                mPlace = data.getParcelableExtra(AppConstants.COMMENT_RESULT_EXTRA_KEY);
+                // refresh scrollview
+                initScrollView();
             }
         }
-        if(resultCode == getActivity().RESULT_CANCELED){
+        if (resultCode == getActivity().RESULT_CANCELED) {
             // do error handle (no extra data pass back)
         }
     }
@@ -248,7 +244,7 @@ public class SpotShowFragment extends Fragment
                 mRadius = radius;
                 if (radius == 1) {
                     mVH.ivImage.setImageBitmap(mVH.bmBG);
-                } else {
+                } else if (radius < MAX_RADIUS) {
                     mVH.ivImage.setImageBitmap(getBlurBitmap(mVH.bmBG, radius));
                 }
             }
