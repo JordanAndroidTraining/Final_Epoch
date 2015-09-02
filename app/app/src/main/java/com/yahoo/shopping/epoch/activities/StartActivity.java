@@ -4,9 +4,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,27 +17,43 @@ import com.yahoo.shopping.epoch.constants.AppConstants;
 
 public class StartActivity extends ActionBarActivity {
 
+    private ImageView mBgImage;
+    private Runnable mRunable;
 
+    private void launchMainActivity() {
+        Intent i = new Intent(this, EpochActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        
-        final Intent i = new Intent(this, EpochActivity.class);
 
-        ImageView bgIv = (ImageView) findViewById(R.id.startBgIv);
-        doScaleImageAnimation(bgIv, 1.15f, 1.0f, 10, AppConstants.SPLASH_SHOW_DURATION);
+        mBgImage = (ImageView) findViewById(R.id.startBgIv);
 
-        // Go to Epoch Activity after x seconds have passed
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        // do animation
+        doScaleImageAnimation(mBgImage, 1.15f, 1.0f, 10, AppConstants.SPLASH_SHOW_DURATION);
+
+        // prepare runnable
+        mRunable = new Runnable() {
             public void run() {
-                startActivity(i);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
+                launchMainActivity();
             }
-        }, AppConstants.SPLASH_SHOW_DURATION);
+        };
+        // go to Epoch Activity after x seconds have passed
+        mBgImage.postDelayed(mRunable, AppConstants.SPLASH_SHOW_DURATION);
+
+        // cancel delay, direct go to Epoch Activity
+        mBgImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBgImage.removeCallbacks(mRunable);
+                launchMainActivity();
+            }
+        });
 
     }
 
