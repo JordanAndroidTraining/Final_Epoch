@@ -80,6 +80,7 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         mVH.rlToolbar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
         mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
         mVH.ivMakeComment2 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment2);
+        mVH.tvPhotosC = (TextView) view.findViewById(R.id.fragment_spot_show_tv_photos_caption);
         mVH.rlPhotos = (PercentRelativeLayout) view.findViewById(R.id.fragment_spot_show_rl_photos);
         mVH.llComments = (LinearLayout) view.findViewById(R.id.fragment_spot_show_ll_comments);
 
@@ -183,9 +184,7 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         }
     }
 
-    private void initPhotoGrid(List<SpotPhoto> photos) {
-        // remove old photos first
-        mVH.rlPhotos.removeAllViews();
+    private void renderPhotoGrid(List<SpotPhoto> photos) {
         // loop to create photo grid
         int ids = 99;
         for (int i = 0; i < photos.size(); i++) {
@@ -236,12 +235,21 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
     }
 
     private void fetchPhotoGrid(String keyword) {
+        // remove old photos first
+        mVH.rlPhotos.removeAllViews();
         // fetch Photos
         mGIS.fetchImages(keyword, new GoogleImageService.OnFetchedListener() {
             @Override
             public void onFetched(List<GoogleImageResult> imageResults, int nextPage) {
                 List<SpotPhoto> photos = SpotPhoto.fromGoogleImageResults(imageResults);
-                initPhotoGrid(photos);
+                if (photos.size() == 0) {
+                    mVH.tvPhotosC.setVisibility(View.GONE);
+                    mVH.rlPhotos.setVisibility(View.GONE);
+                } else {
+                    renderPhotoGrid(photos);
+                    mVH.tvPhotosC.setVisibility(View.VISIBLE);
+                    mVH.rlPhotos.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -367,6 +375,7 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         public Bitmap bmBG;
         public ImageView ivMakeComment;
         public ImageView ivMakeComment2;
+        public TextView tvPhotosC;
         public PercentRelativeLayout rlPhotos;
         public LinearLayout llComments;
     }
