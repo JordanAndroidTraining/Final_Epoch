@@ -152,12 +152,50 @@
                 android:layout_below="@id/fragment_spot_show_tv_trafficinfo"
                 android:text="旅行攝影" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/fragment_spot_show_rv_photos"
+            <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/fragment_spot_show_rl_photos"
                 android:layout_width="match_parent"
-                android:layout_height="700dp"
-                android:layout_below="@id/fragment_spot_show_tv_photos_caption"
-                android:layout_margin="6dp" />
+                android:layout_height="match_parent"
+                android:layout_below="@+id/fragment_spot_show_tv_photos_caption">
+
+                <ImageView
+                    android:id="@+id/g1"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#ff44aacc"
+                    app:layout_widthPercent="50%" />
+
+                <ImageView
+                    android:id="@+id/g2"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#ffe40000"
+                    app:layout_widthPercent="50%" />
+
+                <ImageView
+                    android:id="@+id/g3"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/g1"
+                    android:background="#ff00ff22"
+                    app:layout_widthPercent="50%" />
+
+                <ImageView
+                    android:id="@+id/g4"
+                    android:layout_width="0dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/g2"
+                    android:background="#ffcccccc"
+                    app:layout_widthPercent="50%" />
+
+            </android.support.percent.PercentRelativeLayout>
 
             <!-- Comments -->
             <TextView
@@ -165,7 +203,7 @@
                 style="@style/SpotShowCaption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/fragment_spot_show_rv_photos"
+                android:layout_below="@id/fragment_spot_show_rl_photos"
                 android:text="留言" />
 
             <ImageView

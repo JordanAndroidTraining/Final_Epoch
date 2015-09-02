@@ -9,9 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.activities.CommentActivity;
-import com.yahoo.shopping.epoch.adapters.SpotShowPhotoGridAdapter;
+import com.yahoo.shopping.epoch.activities.PhotoDisplayActivity;
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.models.Comment;
 import com.yahoo.shopping.epoch.models.SpotPhoto;
@@ -40,11 +39,8 @@ import java.util.List;
 
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 
-public class SpotShowFragment extends Fragment
-        implements View.OnScrollChangeListener, View.OnClickListener /*, GoogleImageService.OnFetchedListener*/ {
+public class SpotShowFragment extends Fragment implements View.OnScrollChangeListener, View.OnClickListener {
     private final int MAX_RADIUS = 25;
-    private final int PHOTO_GRID_SPAN_COUNT = 2;
-
     private int mRadius = 0;
 
     private Context mContext;
@@ -84,8 +80,7 @@ public class SpotShowFragment extends Fragment
         mVH.rlToolbar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
         mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
         mVH.ivMakeComment2 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment2);
-        mVH.rvPhotoGrid = (RecyclerView) view.findViewById(R.id.fragment_spot_show_rv_photos);
-        mVH.rvPhotoGrid.setLayoutManager(new StaggeredGridLayoutManager(PHOTO_GRID_SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL));
+        mVH.rlPhotos = (PercentRelativeLayout) view.findViewById(R.id.fragment_spot_show_rl_photos);
         mVH.llComments = (LinearLayout) view.findViewById(R.id.fragment_spot_show_ll_comments);
 
         initToolbar();
@@ -188,14 +183,65 @@ public class SpotShowFragment extends Fragment
         }
     }
 
+    private void initPhotoGrid(List<SpotPhoto> photos) {
+        // remove old photos first
+        mVH.rlPhotos.removeAllViews();
+        // loop to create photo grid
+        int ids = 99;
+        for (int i = 0; i < photos.size(); i++) {
+            SpotPhoto photo = photos.get(i);
+            // create ImageView
+            ImageView img = new ImageView(mContext);
+            img.setId(++ids);
+            img.setAdjustViewBounds(true);
+            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            // prepare layout params
+            PercentRelativeLayout.LayoutParams lp = new PercentRelativeLayout.LayoutParams(PercentRelativeLayout.LayoutParams.WRAP_CONTENT, PercentRelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.getPercentLayoutInfo().widthPercent = 0.5f;
+            if (ids > 100) {
+                if (ids % 2 == 0) {
+                    lp.addRule(PercentRelativeLayout.ALIGN_PARENT_LEFT);
+                    img.setPadding(20, 10, 10, 10);
+                } else {
+                    lp.addRule(PercentRelativeLayout.ALIGN_PARENT_RIGHT);
+                    img.setPadding(10, 10, 20, 10);
+                }
+                lp.addRule(PercentRelativeLayout.BELOW, ids - 2);
+            } else {
+                lp.addRule(PercentRelativeLayout.ALIGN_PARENT_LEFT);
+                lp.addRule(PercentRelativeLayout.ALIGN_PARENT_TOP);
+                img.setPadding(20, 10, 10, 10);
+            }
+            img.setLayoutParams(lp);
+            // add to container
+            mVH.rlPhotos.addView(img);
+            // load image
+            Picasso.with(mContext).load(photo.tbUrl).into(img);
+            // bind click event
+            img.setTag(photo);
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // prepare Intent
+                    Intent i = new Intent(v.getContext(), PhotoDisplayActivity.class);
+                    // get image info object
+                    SpotPhoto photo = (SpotPhoto) v.getTag();
+                    // put img info object into Intent
+                    i.putExtra("photo", photo);
+                    // launch ImageDisplay layer
+                    v.getContext().startActivity(i);
+                }
+            });
+        }
+    }
+
     private void fetchPhotoGrid(String keyword) {
         // fetch Photos
         mGIS.fetchImages(keyword, new GoogleImageService.OnFetchedListener() {
             @Override
             public void onFetched(List<GoogleImageResult> imageResults, int nextPage) {
                 List<SpotPhoto> photos = SpotPhoto.fromGoogleImageResults(imageResults);
-                SpotShowPhotoGridAdapter adapter = new SpotShowPhotoGridAdapter(photos);
-                mVH.rvPhotoGrid.setAdapter(adapter);
+                initPhotoGrid(photos);
             }
         });
     }
@@ -288,6 +334,7 @@ public class SpotShowFragment extends Fragment
         }
         // Alpha Toolbar
         int alpha = 100 * scrollY / containerHeight;
+        if (alpha > 200) { alpha = 200; }
         mVH.rlToolbar.setBackgroundColor(Color.argb(alpha, 0, 0, 0));
     }
 
@@ -320,7 +367,7 @@ public class SpotShowFragment extends Fragment
         public Bitmap bmBG;
         public ImageView ivMakeComment;
         public ImageView ivMakeComment2;
-        public RecyclerView rvPhotoGrid;
+        public PercentRelativeLayout rlPhotos;
         public LinearLayout llComments;
     }
 }
