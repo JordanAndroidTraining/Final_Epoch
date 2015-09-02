@@ -332,7 +332,7 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
             }
             // calculate radius
             int radius = 1 + (MAX_RADIUS * scrollY / containerHeight);
-            if (mRadius != radius) {
+            if ((mVH.bmBG != null) && (mRadius != radius)) {
                 mRadius = radius;
                 if (radius == 1) {
                     mVH.ivImage.setImageBitmap(mVH.bmBG);
