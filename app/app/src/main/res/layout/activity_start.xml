@@ -18,6 +18,7 @@
         android:text="E P O C H"
         android:id="@+id/textView"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-light"/>
 
 </RelativeLayout>
