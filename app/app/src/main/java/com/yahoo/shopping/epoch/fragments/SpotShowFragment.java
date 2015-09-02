@@ -29,6 +29,7 @@ import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.activities.CommentActivity;
 import com.yahoo.shopping.epoch.adapters.SpotShowPhotoGridAdapter;
 import com.yahoo.shopping.epoch.constants.AppConstants;
+import com.yahoo.shopping.epoch.models.Comment;
 import com.yahoo.shopping.epoch.models.SpotPhoto;
 import com.yahoo.shopping.epoch.models.SpotPlace;
 import com.yahoo.shopping.epoch.utils.GoogleImageResult;
@@ -47,6 +48,7 @@ public class SpotShowFragment extends Fragment
     private int mRadius = 0;
 
     private Context mContext;
+    private LayoutInflater mInflater;
     private SpotPlace mPlace;
     private ViewHolder mVH = new ViewHolder();
     private GoogleImageService mGIS = new GoogleImageService();
@@ -61,15 +63,11 @@ public class SpotShowFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mInflater = inflater;
         View view = inflater.inflate(R.layout.fragment_spot_show, null);
 
         mVH.svContainer = (ScrollView) view.findViewById(R.id.fragment_spot_show_sv_container);
-        mVH.llFavStar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_ll_favstar);
-        mVH.ivFavStar1 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar1);
-        mVH.ivFavStar2 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar2);
-        mVH.ivFavStar3 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar3);
-        mVH.ivFavStar4 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar4);
-        mVH.ivFavStar5 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar5);
+        mVH.llFavStar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_ll_rating);
         mVH.tvTitle = (TextView) view.findViewById(R.id.fragment_spot_show_tv_title);
         mVH.tvAddressC = (TextView) view.findViewById(R.id.fragment_spot_show_tv_feature_caption);
         mVH.tvAddress = (TextView) view.findViewById(R.id.fragment_spot_show_tv_address);
@@ -86,12 +84,15 @@ public class SpotShowFragment extends Fragment
         mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
         mVH.rvPhotoGrid = (RecyclerView) view.findViewById(R.id.fragment_spot_show_rv_photos);
         mVH.rvPhotoGrid.setLayoutManager(new StaggeredGridLayoutManager(PHOTO_GRID_SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL));
+        mVH.llComments = (LinearLayout) view.findViewById(R.id.fragment_spot_show_ll_comments);
 
         initToolbar();
         initScrollView();
         initBackgorund();
 
         fetchPhotoGrid(mPlace.getTitle());
+
+        initComments();
 
         return view;
     }
@@ -106,12 +107,17 @@ public class SpotShowFragment extends Fragment
         view.requestLayout();
     }
 
-    private void setFavStarRating(int rating) {
-        mVH.ivFavStar1.setImageResource(rating >= 1 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
-        mVH.ivFavStar2.setImageResource(rating >= 2 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
-        mVH.ivFavStar3.setImageResource(rating >= 3 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
-        mVH.ivFavStar4.setImageResource(rating >= 4 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
-        mVH.ivFavStar5.setImageResource(rating >= 5 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+    private void setFavStarRating(View view, int rating) {
+        ImageView fs1 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar1);
+        ImageView fs2 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar2);
+        ImageView fs3 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar3);
+        ImageView fs4 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar4);
+        ImageView fs5 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_favstar5);
+        fs1.setImageResource(rating >= 1 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        fs2.setImageResource(rating >= 2 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        fs3.setImageResource(rating >= 3 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        fs4.setImageResource(rating >= 4 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
+        fs5.setImageResource(rating >= 5 ? R.drawable.ic_action_favstar1 : R.drawable.ic_action_favstar0);
     }
 
     private void initToolbar() {
@@ -131,7 +137,7 @@ public class SpotShowFragment extends Fragment
 
     private void initScrollView() {
         setTitleMargin(mVH.llFavStar);
-        setFavStarRating(mPlace.getRating());
+        setFavStarRating(mVH.llFavStar, mPlace.getRating());
 
         mVH.tvTitle.setText(mPlace.getTitle());
         mVH.tvAddress.setText(mPlace.getAddress());
@@ -154,6 +160,20 @@ public class SpotShowFragment extends Fragment
     private void initBackgorund() {
         mVH.ivImage.setImageResource(0);
         Picasso.with(mContext).load(mPlace.getImageUrl()).into(mVH.ivImage);
+    }
+
+    private void initComments() {
+        mVH.llComments.removeAllViews();
+        List<Comment> comments = mPlace.getCommentList();
+        for (int i = 0; i < comments.size(); i++) {
+            Comment comment = comments.get(i);
+            View llComment = mInflater.inflate(R.layout.fragment_spot_show_comment, null);
+            TextView tvComment = (TextView) llComment.findViewById(R.id.fragment_spot_show_ll_comments_content);
+            setFavStarRating(llComment, comment.getRating());
+            tvComment.setText(comment.getComment());
+            llComment.setBackgroundResource(android.R.color.transparent);
+            mVH.llComments.addView(llComment);
+        }
     }
 
     private void fetchPhotoGrid(String keyword) {
@@ -198,8 +218,9 @@ public class SpotShowFragment extends Fragment
             if (requestCode == AppConstants.INTENT_COMMENT_REQUEST_CODE) {
                 // get SpotPlace data from CommentActivity
                 mPlace = data.getParcelableExtra(AppConstants.COMMENT_RESULT_EXTRA_KEY);
-                // refresh scrollview
+                // refresh data
                 initScrollView();
+                initComments();
             }
         }
         if (resultCode == getActivity().RESULT_CANCELED) {
@@ -267,11 +288,6 @@ public class SpotShowFragment extends Fragment
     private class ViewHolder {
         public ScrollView svContainer;
         public LinearLayout llFavStar;
-        public ImageView ivFavStar1;
-        public ImageView ivFavStar2;
-        public ImageView ivFavStar3;
-        public ImageView ivFavStar4;
-        public ImageView ivFavStar5;
         public TextView tvTitle;
         public TextView tvAddressC;
         public TextView tvAddress;
@@ -288,5 +304,6 @@ public class SpotShowFragment extends Fragment
         public Bitmap bmBG;
         public ImageView ivMakeComment;
         public RecyclerView rvPhotoGrid;
+        public LinearLayout llComments;
     }
 }

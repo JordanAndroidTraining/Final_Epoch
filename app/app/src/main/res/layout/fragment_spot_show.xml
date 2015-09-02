@@ -62,62 +62,20 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp">
 
-            <LinearLayout
-                android:id="@+id/fragment_spot_show_ll_favstar"
+            <include
+                android:id="@+id/fragment_spot_show_ll_rating"
+                layout="@layout/fragment_spot_show_rating"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/favstar_size"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/fragment_spot_show_iv_favstar1"
-                    android:layout_width="@dimen/favstar_size"
-                    android:layout_height="@dimen/favstar_size"
-                    android:layout_marginLeft="@dimen/favstar_margin"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_action_favstar1" />
-
-                <ImageView
-                    android:id="@+id/fragment_spot_show_iv_favstar2"
-                    android:layout_width="@dimen/favstar_size"
-                    android:layout_height="@dimen/favstar_size"
-                    android:layout_marginLeft="@dimen/favstar_margin"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_action_favstar1" />
-
-                <ImageView
-                    android:id="@+id/fragment_spot_show_iv_favstar3"
-                    android:layout_width="@dimen/favstar_size"
-                    android:layout_height="@dimen/favstar_size"
-                    android:layout_marginLeft="@dimen/favstar_margin"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_action_favstar1" />
-
-                <ImageView
-                    android:id="@+id/fragment_spot_show_iv_favstar4"
-                    android:layout_width="@dimen/favstar_size"
-                    android:layout_height="@dimen/favstar_size"
-                    android:layout_marginLeft="@dimen/favstar_margin"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_action_favstar0" />
-
-                <ImageView
-                    android:id="@+id/fragment_spot_show_iv_favstar5"
-                    android:layout_width="@dimen/favstar_size"
-                    android:layout_height="@dimen/favstar_size"
-                    android:layout_marginLeft="@dimen/favstar_margin"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_action_favstar0" />
-
-            </LinearLayout>
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/fragment_spot_show_tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/fragment_spot_show_ll_favstar"
+                android:layout_below="@+id/fragment_spot_show_ll_rating"
                 android:layout_marginLeft="7dp"
                 android:singleLine="true"
                 android:text="休閒步道"
@@ -193,6 +151,24 @@
                 android:layout_height="700dp"
                 android:layout_below="@id/fragment_spot_show_tv_photos_caption"
                 android:layout_margin="6dp" />
+
+            <TextView
+                android:id="@+id/fragment_spot_show_ll_comments_caption"
+                style="@style/SpotShowCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fragment_spot_show_rv_photos"
+                android:text="留言" />
+
+            <LinearLayout
+                android:id="@+id/fragment_spot_show_ll_comments"
+                style="@style/SpotShowContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fragment_spot_show_ll_comments_caption"
+                android:orientation="vertical">
+
+            </LinearLayout>
 
         </RelativeLayout>
 

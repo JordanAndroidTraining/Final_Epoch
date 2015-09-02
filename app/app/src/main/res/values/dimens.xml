@@ -8,7 +8,8 @@
     <dimen name="text_size_medium">15dp</dimen>
     <dimen name="text_size_small">12dp</dimen>
     <dimen name="favstar_size">32dp</dimen>
-    <dimen name="favstar_margin">5dp</dimen>
+    <dimen name="favstar_size_s">16dp</dimen>
+    <dimen name="favstar_margin">3dp</dimen>
     <dimen name="spot_list_rating_star_size">20dp</dimen>
     <dimen name="comment_rating_star_size">36dp</dimen>
 </resources>

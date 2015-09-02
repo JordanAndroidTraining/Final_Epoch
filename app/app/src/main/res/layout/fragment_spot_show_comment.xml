@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_dark"
+    android:orientation="horizontal">
+
+    <include
+        android:id="@+id/fragment_spot_show_ll_comments_rating"
+        layout="@layout/fragment_spot_show_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/favstar_size_s" />
+
+    <TextView
+        android:id="@+id/fragment_spot_show_ll_comments_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="測試測試測試測試測試測試測試測試測試測試測試測試測試"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+
+</LinearLayout>
