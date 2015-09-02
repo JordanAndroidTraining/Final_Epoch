@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 public class CommentActivity extends AppCompatActivity implements View.OnClickListener,View.OnKeyListener {
     private int mResourceId;
+    private int mPrevContentLength;
     private ImageView mCloseCommentIv;
     private TextView mSubmitCommentTv;
     private EditText mCommentContentEt;
@@ -59,7 +60,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
         // bind event
         mCloseCommentIv.setOnClickListener(this);
-        mSubmitCommentTv.setOnClickListener(this);
         mCommentContentEt.setOnKeyListener(this);
         mRateStarIv1.setOnClickListener(this);
         mRateStarIv2.setOnClickListener(this);
@@ -178,13 +178,16 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateSubmitBtn() {
-        if(mCommentContentEt.getText().length() > 0){
+        int contentLength = mCommentContentEt.getText().length();
+        if(contentLength > 0 && mPrevContentLength == 0){
             mSubmitCommentTv.setTextColor(getResources().getColor(R.color.available_blue));
-            mSubmitCommentTv.setClickable(true);
+            mSubmitCommentTv.setOnClickListener(this);
+            mPrevContentLength = contentLength;
         }
-        else {
+        else if(contentLength == 0){
             mSubmitCommentTv.setTextColor(getResources().getColor(R.color.unavailable_grey));
-            mSubmitCommentTv.setClickable(false);
+            mSubmitCommentTv.setOnClickListener(null);
+            mPrevContentLength = contentLength;
         }
     }
 }
