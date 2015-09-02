@@ -290,6 +290,8 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
                 // refresh data
                 initScrollView();
                 initComments();
+                // scroll to page bottom
+                mVH.svContainer.fullScroll(ScrollView.FOCUS_DOWN);
             }
         }
         if (resultCode == getActivity().RESULT_CANCELED) {
