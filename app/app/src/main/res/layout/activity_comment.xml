@@ -46,35 +46,35 @@
             android:id="@+id/commentRateIconIv1"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar0_grey"
+            android:src="@drawable/ic_action_favstar1"
             android:layout_centerVertical="true"
              />
         <ImageView
             android:id="@+id/commentRateIconIv2"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar0_grey"
+            android:src="@drawable/ic_action_favstar1"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv1"/>
         <ImageView
             android:id="@+id/commentRateIconIv3"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar0_grey"
+            android:src="@drawable/ic_action_favstar1"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv2"/>
         <ImageView
             android:id="@+id/commentRateIconIv4"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar0_grey"
+            android:src="@drawable/ic_action_favstar1"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv3"/>
         <ImageView
             android:id="@+id/commentRateIconIv5"
             android:layout_width="@dimen/comment_rating_star_size"
             android:layout_height="@dimen/comment_rating_star_size"
-            android:src="@drawable/ic_action_favstar0_grey"
+            android:src="@drawable/ic_action_favstar1"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/commentRateIconIv4"/>
     </RelativeLayout>

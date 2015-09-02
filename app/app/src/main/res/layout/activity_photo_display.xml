@@ -19,4 +19,14 @@
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher" />
 
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:id="@+id/ivPhotoClose"
+        android:background="@drawable/ic_action_close_white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

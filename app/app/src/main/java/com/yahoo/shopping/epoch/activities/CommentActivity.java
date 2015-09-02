@@ -36,7 +36,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     private String mComment ="";
     private String mSubject = "";
     private String mImgUrl = "";
-    private int mRating = 0;
+    private int mRating = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

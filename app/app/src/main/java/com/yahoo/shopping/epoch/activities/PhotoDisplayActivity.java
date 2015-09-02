@@ -28,6 +28,16 @@ public class PhotoDisplayActivity extends AppCompatActivity {
         });
         // load photo url
         Picasso.with(this).load(photo.photoUrl).into(ivImageFull);
+
+        // get close Btn
+        ImageView ivCloseBtn = (ImageView) findViewById(R.id.ivPhotoClose);
+        ivCloseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
 }
