@@ -11,8 +11,9 @@ public class AppConstants {
 
     public static final String COMMENT_RESULT_EXTRA_KEY = "COMMENT_RESULT_EXTRA_KEY";
 
-    public static final String PREFERENCE_STORAGE_NAME = "Epoch";
+    public static final String PREFERENCE_FAVORITE_STORAGE_NAME = "Epoch";
     public static final String PREFERENCE_FAVORITE_KEY = "Favorite";
+    public static final String PREFERENCE_IMAGE_STORAGE_NAME = "Epoch";
 
     public static final String TRIP_TYPE_COUNTRY_SIDE = "CountrySide";
     public static final String TRIP_TYPE_FARM_VISIT = "FarmVisit";
@@ -23,5 +24,4 @@ public class AppConstants {
     public static final int RENDER_TYPE_CLUSTER = 1;
 
     public static final String REST_BASE_URL = "http://10.0.3.2:8080/";
-
 }

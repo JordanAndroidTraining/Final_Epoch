@@ -1,9 +1,12 @@
 package com.yahoo.shopping.epoch.utils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.yahoo.shopping.epoch.constants.AppConstants;
+import com.yahoo.shopping.epoch.models.Cache;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -22,6 +25,25 @@ public class GoogleImageService {
     public QueryParam mQueryParam = new QueryParam();
     public int mNextPageStartIndex = 0;
 
+    private Context mContext;
+    private boolean mCacheEnabled;
+    private Cache mCache;
+
+    public GoogleImageService() {
+        mContext = null;
+        mCacheEnabled = false;
+        mCache = null;
+    }
+
+    public GoogleImageService(Context context, boolean cacheEnabled) {
+        mContext = context;
+        mCacheEnabled = cacheEnabled;
+
+        if (cacheEnabled) {
+            mCache = new Cache(AppConstants.PREFERENCE_IMAGE_STORAGE_NAME, context);
+        }
+    }
+
     public void fetchImages(String query) {
         fetchImages(query, null, 0, 0, null);
     }
@@ -39,9 +61,53 @@ public class GoogleImageService {
     }
 
     public void fetchImages(String query, final OnFetchedListener listener, int count, int start, QueryParam param) {
+        final String url = genRequestUrl(query, count, start, param);
+
+        String cachedResponse = "";
+        if (mCache != null) {
+            cachedResponse = mCache.getString(url);
+        }
+
+        if (!cachedResponse.isEmpty()) {
+            try {
+                Log.d("XXX: Cache:", url);
+
+                invokeListener(new JSONObject(cachedResponse), listener);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // do async http request
+            Log.d("XXX: QueryURL:", url);
+
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(url, null, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                    try {
+                        if (mCache != null) {
+                            mCache.storeString(url, response.toString());
+                        }
+                        invokeListener(response, listener);
+                    } catch (JSONException e) {
+                        Log.d("XXX: QueryERR:", response.toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                    Log.d("XXX: QueryERR:", throwable.getMessage());
+                }
+            });
+        }
+    }
+
+    private String genRequestUrl(String query, int count, int start, QueryParam param) {
         // if end, do nothing, just exit
         if (start == -1) {
-            return;
+            return "";
         }
         // if first, clear list
         if (start == 0) {
@@ -80,40 +146,24 @@ public class GoogleImageService {
             url += "&imgsz=" + param.imgsz.toLowerCase();
         }
 
-        // do async http request
-        AsyncHttpClient client = new AsyncHttpClient();
-        Log.d("XXX: QueryURL:", url);
-        client.get(url, null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                try {
-                    // load images from JSONArray
-                    JSONObject rootObj = response.getJSONObject("responseData"); // TODO: strange format change
-                    JSONArray results = rootObj.getJSONArray("results");
-                    mImages.addAll(GoogleImageResult.fromJSONArray(results));
+        return url;
+    }
 
-                    // get pagination data
-                    JSONObject cursor = rootObj.getJSONObject("cursor");
-                    JSONObject nextPage = cursor.getJSONArray("pages").optJSONObject(cursor.getInt("currentPageIndex") + 1);
-                    mNextPageStartIndex = (nextPage == null) ? -1 : nextPage.getInt("start");
+    private void invokeListener(JSONObject response, OnFetchedListener listener) throws JSONException {
+        // load images from JSONArray
+        JSONObject rootObj = response.getJSONObject("responseData");
+        JSONArray results = rootObj.getJSONArray("results");
+        mImages.addAll(GoogleImageResult.fromJSONArray(results));
 
-                    // notify listener
-                    if (listener != null) {
-                        listener.onFetched(mImages, mNextPageStartIndex);
-                    }
-                } catch (JSONException e) {
-                    Log.d("XXX: QueryERR:", response.toString());
-                    e.printStackTrace();
-                }
-            }
+        // get pagination data
+        JSONObject cursor = rootObj.getJSONObject("cursor");
+        JSONObject nextPage = cursor.getJSONArray("pages").optJSONObject(cursor.getInt("currentPageIndex") + 1);
+        mNextPageStartIndex = (nextPage == null) ? -1 : nextPage.getInt("start");
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Log.d("XXX: QueryERR:", throwable.getMessage());
-            }
-        });
+        // notify listener
+        if (listener != null) {
+            listener.onFetched(mImages, mNextPageStartIndex);
+        }
     }
 
     public static class QueryParam implements Serializable {
@@ -124,6 +174,7 @@ public class GoogleImageService {
             String ClipArt = "clipart";
             String LineArt = "lineart";
         }
+
         public interface IMGTYPE {
             String NotSpecified = "";
             String Icon = "icon";
@@ -134,6 +185,7 @@ public class GoogleImageService {
             String XXLarge = "xxlarge";
             String Huge = "huge";
         }
+
         public interface IMGCOLOR {
             String NotSpecified = "";
             String Black = "black";
@@ -149,6 +201,7 @@ public class GoogleImageService {
             String White = "white";
             String Yellow = "yellow";
         }
+
         public String imgsz = IMGSZ.NotSpecified;
         public String imgtype = IMGTYPE.NotSpecified;
         public String imgcolor = IMGCOLOR.NotSpecified;
@@ -157,6 +210,5 @@ public class GoogleImageService {
 
     public interface OnFetchedListener {
         void onFetched(List<GoogleImageResult> imageResults, int nextPage);
-    };
-
+    }
 }

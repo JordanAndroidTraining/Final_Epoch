@@ -51,13 +51,14 @@ public class SpotShowFragment extends Fragment
     private LayoutInflater mInflater;
     private SpotPlace mPlace;
     private ViewHolder mVH = new ViewHolder();
-    private GoogleImageService mGIS = new GoogleImageService();
+    private GoogleImageService mGIS;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         mPlace = getArguments().getParcelable(AppConstants.ARGUMENTS_SPOT_PLACE);
+        mGIS = new GoogleImageService(getActivity(), true);
     }
 
     @Nullable

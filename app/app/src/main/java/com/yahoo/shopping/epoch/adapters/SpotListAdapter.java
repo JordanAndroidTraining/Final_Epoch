@@ -13,12 +13,14 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 import com.yahoo.shopping.epoch.EpochClient;
 import com.yahoo.shopping.epoch.R;
-import com.yahoo.shopping.epoch.models.FavoriteSpots;
+import com.yahoo.shopping.epoch.constants.AppConstants;
+import com.yahoo.shopping.epoch.models.Cache;
 import com.yahoo.shopping.epoch.models.SpotPlace;
 import com.yahoo.shopping.epoch.utils.GoogleImageResult;
 import com.yahoo.shopping.epoch.utils.GoogleImageService;
 
 import java.util.List;
+import java.util.Set;
 
 public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
 
@@ -57,25 +59,29 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
     }
 
     private void setFavoriteContent(final ImageView ivFavorite, final SpotPlace place) {
-        FavoriteSpots preferences = FavoriteSpots.getInstance(mContext);
+        Cache prefCache = new Cache(AppConstants.PREFERENCE_FAVORITE_STORAGE_NAME, mContext);
+        Set<String> favorites = prefCache.getStringSet(AppConstants.PREFERENCE_FAVORITE_KEY);
 
-        if (preferences.contains(String.valueOf(place.getResourceId()))) {
+        if (favorites.contains(String.valueOf(place.getResourceId()))) {
             ivFavorite.setImageResource(R.drawable.ic_fav_heart1);
         }
 
         ivFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FavoriteSpots preferences = FavoriteSpots.getInstance(mContext);
+                Cache prefCache = new Cache(AppConstants.PREFERENCE_FAVORITE_STORAGE_NAME, mContext);
+                Set<String> favorites = prefCache.getStringSet(AppConstants.PREFERENCE_FAVORITE_KEY);
 
                 String resourceId = String.valueOf(place.getResourceId());
-                if (preferences.contains(resourceId)) {
-                    preferences.removeFavorite(resourceId);
+                if (favorites.contains(resourceId)) {
+                    favorites.remove(resourceId);
+                    prefCache.storeStringSet(AppConstants.PREFERENCE_FAVORITE_KEY, favorites);
                     ivFavorite.setImageResource(R.drawable.ic_fav_heart0);
 
                     Toast.makeText(mContext, "已刪除: " + place.getTitle(), Toast.LENGTH_SHORT).show();
                 } else {
-                    preferences.addFavorite(resourceId);
+                    favorites.add(resourceId);
+                    prefCache.storeStringSet(AppConstants.PREFERENCE_FAVORITE_KEY, favorites);
                     ivFavorite.setImageResource(R.drawable.ic_fav_heart1);
 
                     Toast.makeText(mContext, "已增加: " + place.getTitle(), Toast.LENGTH_SHORT).show();

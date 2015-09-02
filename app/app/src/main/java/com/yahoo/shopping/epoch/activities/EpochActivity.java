@@ -20,7 +20,7 @@ import com.yahoo.shopping.epoch.EpochClient;
 import com.yahoo.shopping.epoch.R;
 import com.yahoo.shopping.epoch.constants.AppConstants;
 import com.yahoo.shopping.epoch.fragments.SpotListFragment;
-import com.yahoo.shopping.epoch.models.FavoriteSpots;
+import com.yahoo.shopping.epoch.models.Cache;
 import com.yahoo.shopping.epoch.models.SpotPlace;
 
 import org.apache.http.Header;
@@ -91,7 +91,8 @@ public class EpochActivity extends AppCompatActivity {
     }
 
     private void performGetFavoriteSpots() {
-        Set<String> favorites = FavoriteSpots.getInstance(this).getFavorites();
+        Cache prefCache = new Cache(AppConstants.PREFERENCE_FAVORITE_STORAGE_NAME, this);
+        Set<String> favorites = prefCache.getStringSet(AppConstants.PREFERENCE_FAVORITE_KEY);
         new FetchMultipleResourcesAsyncTask().execute(favorites);
     }
 
