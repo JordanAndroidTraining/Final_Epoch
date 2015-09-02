@@ -24,4 +24,6 @@ public class AppConstants {
     public static final int RENDER_TYPE_CLUSTER = 1;
 
     public static final String REST_BASE_URL = "http://10.0.3.2:8080/";
+
+    public static final int SPLASH_SHOW_DURATION = 3000; //the duration of splash page
 }

@@ -108,7 +108,7 @@ public class SpotListAdapter extends ArrayAdapter<SpotPlace> {
         if (place.getImageUrl().isEmpty()) {
             new GoogleImageService().fetchImages(place.getTitle(), new GoogleImageService.OnFetchedListener() {
                 @Override
-                public void onFetched(List<GoogleImageResult> imageResults, int nextPage) {
+                public void onFetched(List<GoogleImageResult> imageResults, int nextPage) { // cached in server side therefore client side disable cache
                     String url = imageResults.get(0).url;
                     if (!url.isEmpty()) {
                         // update app entity
