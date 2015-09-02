@@ -1,7 +1,12 @@
 package com.yahoo.shopping.epoch.activities;
 
+import android.animation.AnimatorSet;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +19,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.shopping.epoch.EpochClient;
@@ -34,6 +43,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class EpochActivity extends AppCompatActivity {
@@ -43,6 +53,9 @@ public class EpochActivity extends AppCompatActivity {
     private String mTripType;
     private String mSearchKeyword;
     private ArrayList<SpotPlace> mSpotPlaces;
+    private ImageView mDice1Iv;
+    private ImageView mDice2Iv;
+    private ImageView mDice3Iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +75,7 @@ public class EpochActivity extends AppCompatActivity {
             }
         });
 
+
         // set default trip type as countryside
         mTripType = AppConstants.TRIP_TYPE_COUNTRY_SIDE;
 
@@ -72,6 +86,9 @@ public class EpochActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_hamburger);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+
+
 
         //get data && render it
         //default render type is RENDER_TYPE_CLUSTER
@@ -142,11 +159,65 @@ public class EpochActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            mDrawer.openDrawer(GravityCompat.START);
+        switch (id){
+            case android.R.id.home:
+                mDrawer.openDrawer(GravityCompat.START);
+                break;
+            case R.id.action_dice_spot_place:
+                randomR12N();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void randomR12N() {
+        // Get dice reference
+        mDice1Iv = (ImageView) findViewById(R.id.dice1Iv);
+        mDice2Iv = (ImageView) findViewById(R.id.dice2Iv);
+        mDice3Iv = (ImageView) findViewById(R.id.dice3Iv);
+
+        showDices();
+        DoDiceAnimation(mDice1Iv,R.drawable.dice_anim1);
+        DoDiceAnimation(mDice2Iv,R.drawable.dice_anim2);
+        DoDiceAnimation(mDice3Iv,R.drawable.dice_anim3);
+        final Context selfContext = this;
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                hideDices();
+                Random rand = new Random();
+                int position = rand.nextInt(mSpotPlaces.size());
+                Intent intent = new Intent(selfContext, SpotShowActivity.class);
+                intent.putParcelableArrayListExtra(AppConstants.INTENT_SPOT_PLACES, mSpotPlaces);
+                intent.putExtra(AppConstants.INTENT_SPOT_SELECT_PLACES_INDEX, position);
+                startActivity(intent);
+            }
+        }, 3000);
+    }
+
+    private void DoDiceAnimation(ImageView v, int resId){
+        v.setBackgroundResource(resId);
+        AnimationDrawable anim = (AnimationDrawable) v.getBackground();
+        anim.start();
+    }
+
+    private void hideDices(){
+        if(mDice1Iv != null)
+            mDice1Iv.setVisibility(View.GONE);
+        if(mDice2Iv != null)
+            mDice2Iv.setVisibility(View.GONE);
+        if(mDice3Iv != null)
+            mDice3Iv.setVisibility(View.GONE);
+    }
+
+    private void showDices(){
+        if(mDice1Iv != null)
+            mDice1Iv.setVisibility(View.VISIBLE);
+        if(mDice2Iv != null)
+            mDice2Iv.setVisibility(View.VISIBLE);
+        if(mDice3Iv != null)
+            mDice3Iv.setVisibility(View.VISIBLE);
     }
 
     public void navigationItemSelectHandler(MenuItem menuItem) {

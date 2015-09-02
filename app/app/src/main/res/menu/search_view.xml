@@ -5,7 +5,13 @@
     <item android:id="@+id/action_search"
         android:title="SEARCH"
         android:icon="@drawable/ic_search_icon"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item
+        android:id="@+id/action_dice_spot_place"
+        android:title="DICE"
+        android:icon="@drawable/ic_action_dice"
+        app:showAsAction="always" />
 
 </menu>
