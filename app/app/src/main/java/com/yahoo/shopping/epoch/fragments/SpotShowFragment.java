@@ -82,6 +82,7 @@ public class SpotShowFragment extends Fragment
         mVH.ivMakeCall = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecall);
         mVH.rlToolbar = (LinearLayout) view.findViewById(R.id.fragment_spot_show_rl_toolbar);
         mVH.ivMakeComment = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment);
+        mVH.ivMakeComment2 = (ImageView) view.findViewById(R.id.fragment_spot_show_iv_makecomment2);
         mVH.rvPhotoGrid = (RecyclerView) view.findViewById(R.id.fragment_spot_show_rv_photos);
         mVH.rvPhotoGrid.setLayoutManager(new StaggeredGridLayoutManager(PHOTO_GRID_SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL));
         mVH.llComments = (LinearLayout) view.findViewById(R.id.fragment_spot_show_ll_comments);
@@ -133,6 +134,9 @@ public class SpotShowFragment extends Fragment
 
         mVH.ivMakeComment.setTag(mPlace.getResourceId());
         mVH.ivMakeComment.setOnClickListener(this);
+
+        mVH.ivMakeComment2.setTag(mPlace.getResourceId());
+        mVH.ivMakeComment2.setOnClickListener(this);
     }
 
     private void initScrollView() {
@@ -163,8 +167,15 @@ public class SpotShowFragment extends Fragment
     }
 
     private void initComments() {
-        mVH.llComments.removeAllViews();
         List<Comment> comments = mPlace.getCommentList();
+        if (comments.size() == 0) {
+            TextView tvTips = new TextView(mContext);
+            tvTips.setTextColor(Color.DKGRAY);
+            tvTips.setText("(尚無留言)");
+            mVH.llComments.addView(tvTips);
+            return;
+        }
+        mVH.llComments.removeAllViews();
         for (int i = 0; i < comments.size(); i++) {
             Comment comment = comments.get(i);
             View llComment = mInflater.inflate(R.layout.fragment_spot_show_comment, null);
@@ -190,24 +201,28 @@ public class SpotShowFragment extends Fragment
 
     @Override
     public void onClick(View v) {
+        Animation animShake = AnimationUtils.loadAnimation(mContext, R.anim.shake);
+        Animation animMagnify = AnimationUtils.loadAnimation(mContext, R.anim.magnify);
         switch (v.getId()) {
             case R.id.fragment_spot_show_iv_makecall:
                 // shake icon
-                Animation animShake = AnimationUtils.loadAnimation(mContext, R.anim.shake);
                 mVH.ivMakeCall.startAnimation(animShake);
                 // make call
                 makePhoneCall((String) v.getTag());
                 break;
             case R.id.fragment_spot_show_iv_viewmap:
                 // magnify icon
-                Animation animMagnify = AnimationUtils.loadAnimation(mContext, R.anim.magnify);
                 mVH.ivViewMap.startAnimation(animMagnify);
                 launchGoogleMap((String) v.getTag());
                 break;
             case R.id.fragment_spot_show_iv_makecomment:
+            case R.id.fragment_spot_show_iv_makecomment2:
+                // magnify icon
+                mVH.ivMakeComment.startAnimation(animMagnify);
+                mVH.ivMakeComment2.startAnimation(animMagnify);
+                // startActivity
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 intent.putExtra(AppConstants.INTENT_COMMENT_RESOURCE_ID, (int) v.getTag());
-                //startActivity(intent);
                 startActivityForResult(intent, AppConstants.INTENT_COMMENT_REQUEST_CODE);
         }
     }
@@ -303,6 +318,7 @@ public class SpotShowFragment extends Fragment
         public ImageView ivMakeCall;
         public Bitmap bmBG;
         public ImageView ivMakeComment;
+        public ImageView ivMakeComment2;
         public RecyclerView rvPhotoGrid;
         public LinearLayout llComments;
     }

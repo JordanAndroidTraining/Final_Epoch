@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- Background Photo -->
     <ImageView
         android:id="@+id/fragment_spot_show_iv_image"
         android:layout_width="match_parent"
@@ -11,12 +12,14 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/ic_launcher" />
 
+    <!-- Background Gradient -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_inner"
         android:fillViewport="true" />
 
+    <!-- Toolbar -->
     <LinearLayout
         android:id="@+id/fragment_spot_show_rl_toolbar"
         android:layout_width="match_parent"
@@ -51,6 +54,7 @@
 
     </LinearLayout>
 
+    <!-- ScrollView -->
     <ScrollView
         android:id="@+id/fragment_spot_show_sv_container"
         android:layout_width="match_parent"
@@ -62,6 +66,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp">
 
+            <!-- Rating -->
             <include
                 android:id="@+id/fragment_spot_show_ll_rating"
                 layout="@layout/fragment_spot_show_rating"
@@ -71,6 +76,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp" />
 
+            <!-- Info Area -->
             <TextView
                 android:id="@+id/fragment_spot_show_tv_title"
                 android:layout_width="wrap_content"
@@ -137,6 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fragment_spot_show_tv_trafficinfo_caption" />
 
+            <!-- PhotoGrid -->
             <TextView
                 android:id="@+id/fragment_spot_show_tv_photos_caption"
                 style="@style/SpotShowCaption"
@@ -152,6 +159,7 @@
                 android:layout_below="@id/fragment_spot_show_tv_photos_caption"
                 android:layout_margin="6dp" />
 
+            <!-- Comments -->
             <TextView
                 android:id="@+id/fragment_spot_show_ll_comments_caption"
                 style="@style/SpotShowCaption"
@@ -160,15 +168,24 @@
                 android:layout_below="@id/fragment_spot_show_rv_photos"
                 android:text="留言" />
 
+            <ImageView
+                android:id="@+id/fragment_spot_show_iv_makecomment2"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_alignBottom="@+id/fragment_spot_show_ll_comments_caption"
+                android:layout_marginBottom="-7dp"
+                android:layout_marginLeft="-12dp"
+                android:layout_toRightOf="@+id/fragment_spot_show_ll_comments_caption"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_comment_white" />
+
             <LinearLayout
                 android:id="@+id/fragment_spot_show_ll_comments"
                 style="@style/SpotShowContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/fragment_spot_show_ll_comments_caption"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                android:orientation="vertical" />
 
         </RelativeLayout>
 
