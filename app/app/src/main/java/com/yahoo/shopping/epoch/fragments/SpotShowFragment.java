@@ -236,16 +236,15 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
 
     private void fetchPhotoGrid(String keyword) {
         // remove old photos first
+        mVH.tvPhotosC.setVisibility(View.GONE);
+        mVH.rlPhotos.setVisibility(View.GONE);
         mVH.rlPhotos.removeAllViews();
         // fetch Photos
         mGIS.fetchImages(keyword, new GoogleImageService.OnFetchedListener() {
             @Override
             public void onFetched(List<GoogleImageResult> imageResults, int nextPage) {
                 List<SpotPhoto> photos = SpotPhoto.fromGoogleImageResults(imageResults);
-                if (photos.size() == 0) {
-                    mVH.tvPhotosC.setVisibility(View.GONE);
-                    mVH.rlPhotos.setVisibility(View.GONE);
-                } else {
+                if (photos.size() > 0) {
                     renderPhotoGrid(photos);
                     mVH.tvPhotosC.setVisibility(View.VISIBLE);
                     mVH.rlPhotos.setVisibility(View.VISIBLE);
