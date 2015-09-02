@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class EpochActivity extends AppCompatActivity {
     private ImageView mDice1Iv;
     private ImageView mDice2Iv;
     private ImageView mDice3Iv;
+    private final static int[] DICE_ANIMATIONS = {R.drawable.dice_anim1,R.drawable.dice_anim2,R.drawable.dice_anim3,R.drawable.dice_anim4,R.drawable.dice_anim5,R.drawable.dice_anim6};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,29 +179,41 @@ public class EpochActivity extends AppCompatActivity {
         mDice3Iv = (ImageView) findViewById(R.id.dice3Iv);
 
         showDices();
-        DoDiceAnimation(mDice1Iv,R.drawable.dice_anim1);
-        DoDiceAnimation(mDice2Iv,R.drawable.dice_anim2);
-        DoDiceAnimation(mDice3Iv,R.drawable.dice_anim3);
+        final AnimationDrawable diceAnim1 = DoDiceAnimation(mDice1Iv);
+        final AnimationDrawable diceAnum2 = DoDiceAnimation(mDice2Iv);
+        final AnimationDrawable diceAnum3 = DoDiceAnimation(mDice3Iv);
         final Context selfContext = this;
 
-        Handler handler = new Handler();
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                hideDices();
-                Random rand = new Random();
-                int position = rand.nextInt(mSpotPlaces.size());
-                Intent intent = new Intent(selfContext, SpotShowActivity.class);
-                intent.putParcelableArrayListExtra(AppConstants.INTENT_SPOT_PLACES, mSpotPlaces);
-                intent.putExtra(AppConstants.INTENT_SPOT_SELECT_PLACES_INDEX, position);
-                startActivity(intent);
+                diceAnim1.stop();
+                diceAnum2.stop();
+                diceAnum3.stop();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideDices();
+                        Random rand = new Random();
+                        int position = rand.nextInt(mSpotPlaces.size());
+                        Intent intent = new Intent(selfContext, SpotShowActivity.class);
+                        intent.putParcelableArrayListExtra(AppConstants.INTENT_SPOT_PLACES, mSpotPlaces);
+                        intent.putExtra(AppConstants.INTENT_SPOT_SELECT_PLACES_INDEX, position);
+                        startActivity(intent);
+                    }
+                }, 1000);
             }
-        }, 3000);
+        }, 2000);
     }
 
-    private void DoDiceAnimation(ImageView v, int resId){
+    private AnimationDrawable DoDiceAnimation(ImageView v){
+        Random rand = new Random();
+        int resId = DICE_ANIMATIONS[rand.nextInt(DICE_ANIMATIONS.length)];
         v.setBackgroundResource(resId);
         AnimationDrawable anim = (AnimationDrawable) v.getBackground();
         anim.start();
+        return anim;
     }
 
     private void hideDices(){

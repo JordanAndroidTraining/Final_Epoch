@@ -167,7 +167,7 @@ public class SpotShowFragment extends Fragment implements View.OnScrollChangeLis
         List<Comment> comments = mPlace.getCommentList();
         if (comments.size() == 0) {
             TextView tvTips = new TextView(mContext);
-            tvTips.setTextColor(Color.DKGRAY);
+            tvTips.setTextColor(Color.LTGRAY);
             tvTips.setText("(尚無留言)");
             mVH.llComments.addView(tvTips);
             return;
